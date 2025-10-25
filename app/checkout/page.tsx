@@ -178,11 +178,11 @@ function CheckoutForm() {
             <div className="w-24 h-24 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <CreditCard className="h-12 w-12 text-amber-600" />
             </div>
-            <h1 className="text-4xl font-bold mb-4 text-gray-900">Panier Vide</h1>
-            <p className="text-xl text-gray-600 mb-8">Votre panier est vide, ajoutez des produits avant de passer commande.</p>
+            <h1 className="text-4xl font-bold mb-4 text-gray-900">Cart Empty</h1>
+            <p className="text-xl text-gray-600 mb-8">Your cart is empty, Add products before passing orders.</p>
             <Button asChild size="lg" className="bg-amber-600 hover:bg-amber-700 px-8 py-3">
               <Link href="/products">
-                Découvrir nos Collections
+                Discover collections
               </Link>
             </Button>
           </div>
@@ -199,17 +199,17 @@ function CheckoutForm() {
             <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Check className="h-12 w-12 text-green-600" />
             </div>
-            <h1 className="text-4xl font-bold mb-4 text-gray-900">Commande Confirmée !</h1>
+            <h1 className="text-4xl font-bold mb-4 text-gray-900">Order Comfirmed !</h1>
             <p className="text-xl text-gray-600 mb-8">
-              Merci pour votre achat. Un email de confirmation a été envoyé à {shippingInfo.email}.
+              Thank you for ordering. An email was sent to: {shippingInfo.email}.
             </p>
             
             <Card className="mb-8">
               <CardContent className="pt-6">
-                <h3 className="font-semibold text-lg mb-4">Résumé de la commande</h3>
+                <h3 className="font-semibold text-lg mb-4">Order History</h3>
                 <div className="space-y-2 text-left">
                   <div className="flex justify-between">
-                    <span>Numéro de commande:</span>
+                    <span>Num of order:</span>
                     <span className="font-semibold">SH{Date.now().toString().slice(-6)}</span>
                   </div>
                   <div className="flex justify-between">
@@ -217,13 +217,13 @@ function CheckoutForm() {
                     <span className="font-semibold text-amber-600">${total.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Mode de livraison:</span>
+                    <span>Shipping Option:</span>
                     <span className="font-semibold">
                       {shippingMethod === 'express' ? 'Express' : 'Standard'}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Adresse de livraison:</span>
+                    <span>Adress of delivery:</span>
                     <span className="font-semibold text-right">
                       {shippingInfo.address}, {shippingInfo.postalCode} {shippingInfo.city}
                     </span>
@@ -235,12 +235,12 @@ function CheckoutForm() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild variant="outline" className="px-8 py-3">
                 <Link href="/orders">
-                  Suivre ma commande
+                  Continue my order
                 </Link>
               </Button>
               <Button asChild className="bg-amber-600 hover:bg-amber-700 px-8 py-3">
                 <Link href="/products">
-                  Continuer mes achats
+                  Continue shopping
                 </Link>
               </Button>
             </div>
@@ -258,7 +258,7 @@ function CheckoutForm() {
           <Button asChild variant="ghost" className="p-0 hover:bg-transparent">
             <Link href="/cart" className="flex items-center text-amber-600 hover:text-amber-700">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Retour au panier
+              Back to cart
             </Link>
           </Button>
           <div className="text-sm text-gray-600 hidden sm:block">
@@ -284,7 +284,7 @@ function CheckoutForm() {
                   <form onSubmit={handleStep1Submit} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="firstName">Prénom *</Label>
+                        <Label htmlFor="firstName">First Name *</Label>
                         <Input
                           id="firstName"
                           required
@@ -297,7 +297,7 @@ function CheckoutForm() {
                         )}
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="lastName">Nom *</Label>
+                        <Label htmlFor="lastName">Last Name *</Label>
                         <Input
                           id="lastName"
                           required
@@ -327,7 +327,7 @@ function CheckoutForm() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="address">Adresse *</Label>
+                      <Label htmlFor="address">Adress *</Label>
                       <Input
                         id="address"
                         required
@@ -342,7 +342,7 @@ function CheckoutForm() {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="city">Ville *</Label>
+                        <Label htmlFor="city">City *</Label>
                         <Input
                           id="city"
                           required
@@ -368,7 +368,7 @@ function CheckoutForm() {
                         )}
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="country">Pays *</Label>
+                        <Label htmlFor="country">Country *</Label>
                         <Input
                           id="country"
                           required
@@ -379,7 +379,7 @@ function CheckoutForm() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="phone">Téléphone</Label>
+                      <Label htmlFor="phone">Phone</Label>
                       <Input
                         id="phone"
                         type="tel"
@@ -389,7 +389,7 @@ function CheckoutForm() {
                     </div>
 
                     <Button type="submit" className="w-full bg-amber-600 hover:bg-amber-700 py-3">
-                      Continuer vers la livraison
+                      Continue to shipping
                     </Button>
                   </form>
                 </CardContent>
@@ -402,7 +402,7 @@ function CheckoutForm() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Truck className="h-5 w-5 mr-2 text-amber-600" />
-                    Méthode de livraison
+                    Shipping option
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -412,10 +412,10 @@ function CheckoutForm() {
                       <Label htmlFor="standard" className="flex-1 cursor-pointer">
                         <div className="flex justify-between items-center">
                           <div>
-                            <p className="font-semibold">Livraison Standard</p>
-                            <p className="text-sm text-gray-600">3-5 jours ouvrés</p>
+                            <p className="font-semibold">Standard Shipping</p>
+                            <p className="text-sm text-gray-600">3-5 Days</p>
                           </div>
-                          <span className="font-semibold">$4.99</span>
+                          <span className="font-semibold">AED4.99</span>
                         </div>
                       </Label>
                     </div>
@@ -425,10 +425,10 @@ function CheckoutForm() {
                       <Label htmlFor="express" className="flex-1 cursor-pointer">
                         <div className="flex justify-between items-center">
                           <div>
-                            <p className="font-semibold">Livraison Express</p>
-                            <p className="text-sm text-gray-600">1-2 jours ouvrés</p>
+                            <p className="font-semibold">Express Shipping</p>
+                            <p className="text-sm text-gray-600">1-2 Days</p>
                           </div>
-                          <span className="font-semibold">$9.99</span>
+                          <span className="font-semibold">AED9.99</span>
                         </div>
                       </Label>
                     </div>
@@ -439,10 +439,10 @@ function CheckoutForm() {
                         <Label htmlFor="free" className="flex-1 cursor-pointer">
                           <div className="flex justify-between items-center">
                             <div>
-                              <p className="font-semibold">Livraison Gratuite</p>
+                              <p className="font-semibold">Free Shipping</p>
                               <p className="text-sm text-gray-600">3-5 jours ouvrés</p>
                             </div>
-                            <span className="font-semibold text-amber-600">Gratuit</span>
+                            <span className="font-semibold text-amber-600">Free</span>
                           </div>
                         </Label>
                       </div>
@@ -477,14 +477,14 @@ function CheckoutForm() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <CreditCard className="h-5 w-5 mr-2 text-amber-600" />
-                    Paiement sécurisé
+                    Secured payment
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {isLoading ? (
                     <div className="flex items-center justify-center py-8">
                       <Loader2 className="h-8 w-8 animate-spin text-amber-600 mr-2" />
-                      <span>Chargement du paiement...</span>
+                      <span>Payment in process...</span>
                     </div>
                   ) : clientSecret ? (
                     <StripePayment
@@ -496,9 +496,9 @@ function CheckoutForm() {
                     />
                   ) : (
                     <div className="text-center py-8">
-                      <p className="text-gray-600 mb-4">Erreur lors du chargement du paiement</p>
+                      <p className="text-gray-600 mb-4">Error while payment</p>
                       <Button onClick={createPaymentIntent}>
-                        Réessayer
+                        Retry
                       </Button>
                     </div>
                   )}
@@ -507,12 +507,12 @@ function CheckoutForm() {
                   <div className="mt-6 p-4 bg-amber-50 rounded-lg border border-amber-200">
                     <div className="flex items-center space-x-2 mb-2">
                       <Shield className="h-4 w-4 text-amber-600" />
-                      <span className="font-semibold text-amber-800">Paiement 100% sécurisé</span>
+                      <span className="font-semibold text-amber-800">Payment 100% secured</span>
                     </div>
                     <div className="text-xs text-amber-700 space-y-1">
                       <p>✓ Cryptage SSL 256 bits</p>
                       <p>✓ Certifié PCI DSS</p>
-                      <p>✓ Données bancaires protégées</p>
+                      <p>✓ Protected Payment details</p>
                     </div>
                   </div>
 
@@ -533,7 +533,7 @@ function CheckoutForm() {
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Résumé de la commande</CardTitle>
+                <CardTitle>Order History</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -551,9 +551,9 @@ function CheckoutForm() {
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-sm truncate">{item.name}</p>
                           <p className="text-xs text-gray-600">
-                            Taille: {item.size} • Couleur: {item.color}
+                            Size: {item.size} • Color: {item.color}
                           </p>
-                          <p className="text-xs text-gray-600">Quantité: {item.quantity}</p>
+                          <p className="text-xs text-gray-600">Quantity: {item.quantity}</p>
                         </div>
                         <p className="font-semibold text-sm">${(item.price * item.quantity).toFixed(2)}</p>
                       </div>
@@ -572,8 +572,8 @@ function CheckoutForm() {
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span>TVA (20%)</span>
-                      <span>${tax.toFixed(2)}</span>
+                      <span>VAT (20%)</span>
+                      <span>AED{tax.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between font-semibold text-lg border-t pt-2">
                       <span>Total</span>
