@@ -1,22 +1,14 @@
-// app/checkout/success/page.tsx
 "use client";
 
-import { useEffect } from 'react';
+import { Suspense } from 'react';
 import { Check, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 
-export default function CheckoutSuccessPage() {
+// Composant interne qui utilise useSearchParams
+function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
   const paymentIntentId = searchParams.get('payment_intent');
-
-  useEffect(() => {
-    // Vous pouvez récupérer les détails de la commande ici
-    if (paymentIntentId) {
-      console.log('Payment successful:', paymentIntentId);
-    }
-  }, [paymentIntentId]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 to-white py-12">
@@ -40,7 +32,7 @@ export default function CheckoutSuccessPage() {
                 </div>
                 <div className="flex justify-between">
                   <span>Transaction:</span>
-                  <span className="font-semibold">{paymentIntentId?.slice(-8)}</span>
+                  <span className="font-semibold">{paymentIntentId?.slice(-8) || 'Confirmée'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Email de confirmation:</span>
@@ -66,5 +58,24 @@ export default function CheckoutSuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Import useSearchParams à l'intérieur du composant
+import { useSearchParams } from 'next/navigation';
+
+// Page principale avec Suspense
+export default function CheckoutSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-white py-12">
+        <div className="container mx-auto px-4 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Chargement de votre confirmation...</p>
+        </div>
+      </div>
+    }>
+      <CheckoutSuccessContent />
+    </Suspense>
   );
 }
