@@ -100,12 +100,12 @@ function CheckoutForm() {
   const validateStep1 = () => {
     const errors: Record<string, string> = {};
     
-    if (!shippingInfo.firstName.trim()) errors.firstName = 'Le prénom est requis';
-    if (!shippingInfo.lastName.trim()) errors.lastName = 'Le nom est requis';
-    if (!shippingInfo.email.trim()) errors.email = 'L\'email est requis';
-    if (!shippingInfo.address.trim()) errors.address = 'L\'adresse est requise';
-    if (!shippingInfo.city.trim()) errors.city = 'La ville est requise';
-    if (!shippingInfo.postalCode.trim()) errors.postalCode = 'Le code postal est requis';
+    if (!shippingInfo.firstName.trim()) errors.firstName = 'First name is required';
+    if (!shippingInfo.lastName.trim()) errors.lastName = 'Name is required';
+    if (!shippingInfo.email.trim()) errors.email = 'Email is required';
+    if (!shippingInfo.address.trim()) errors.address = 'Address is required';
+    if (!shippingInfo.city.trim()) errors.city = 'The city is required';
+    if (!shippingInfo.postalCode.trim()) errors.postalCode = 'Postal code is required';
     
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -127,7 +127,7 @@ function CheckoutForm() {
       setStep(4);
     } catch (error) {
       console.error('Error saving order:', error);
-      alert('Erreur lors de la sauvegarde de la commande');
+      alert('Error saving order');
     } finally {
       setIsProcessingPayment(false);
     }
@@ -159,7 +159,7 @@ function CheckoutForm() {
       });
 
       if (!response.ok) {
-        throw new Error('Erreur lors de la sauvegarde de la commande');
+        throw new Error('Error saving order');
       }
 
       return await response.json();
@@ -262,9 +262,9 @@ function CheckoutForm() {
             </Link>
           </Button>
           <div className="text-sm text-gray-600 hidden sm:block">
-            {step === 1 && '🟢 Livraison • ⚪ Paiement • ⚪ Confirmation'}
-            {step === 2 && '✅ Livraison • 🟢 Paiement • ⚪ Confirmation'}
-            {step === 3 && '✅ Livraison • ✅ Paiement • 🟢 Confirmation'}
+            {step === 1 && '🟢 Delivery • ⚪ Payment • ⚪ Confirmation'}
+            {step === 2 && '✅ Delivery • 🟢 Payment • ⚪ Confirmation'}
+            {step === 3 && '✅ Delivery • ✅ Payment • 🟢 Confirmation'}
           </div>
         </div>
 
@@ -277,7 +277,7 @@ function CheckoutForm() {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Truck className="h-5 w-5 mr-2 text-amber-600" />
-                    Adresse de livraison
+                    Delivery address
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
