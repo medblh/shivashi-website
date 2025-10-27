@@ -100,11 +100,11 @@ function CheckoutForm() {
   const validateStep1 = () => {
     const errors: Record<string, string> = {};
     
-    if (!shippingInfo.firstName.trim()) errors.firstName = 'Le prénom est requis';
-    if (!shippingInfo.lastName.trim()) errors.lastName = 'Le nom est requis';
-    if (!shippingInfo.email.trim()) errors.email = 'L\'email est requis';
-    if (!shippingInfo.address.trim()) errors.address = 'L\'adresse est requise';
-    if (!shippingInfo.city.trim()) errors.city = 'La ville est requise';
+    if (!shippingInfo.firstName.trim()) errors.firstName = 'First name is required';
+    if (!shippingInfo.lastName.trim()) errors.lastName = 'Name is required';
+    if (!shippingInfo.email.trim()) errors.email = 'Email is required';
+    if (!shippingInfo.address.trim()) errors.address = 'Address is required';
+    if (!shippingInfo.city.trim()) errors.city = 'The city is required';
     if (!shippingInfo.postalCode.trim()) errors.postalCode = 'Le code postal est requis';
     
     setFormErrors(errors);
