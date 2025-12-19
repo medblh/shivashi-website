@@ -166,12 +166,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #088839;
+  background: rgba(52, 58, 64, 0.95);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #088839;
+  background: rgba(52, 58, 64, 0.95);
 }
 
 /* Animation pour l'apparition de la recherche */

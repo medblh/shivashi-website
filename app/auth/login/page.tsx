@@ -27,7 +27,7 @@ export default function LoginPage() {
 
     const success = await login(formData.email, formData.password);
     if (!success) {
-      setError('Email ou mot de passe incorrect');
+      setError('Email or password is incorrect');
     }
   };
 
@@ -57,7 +57,7 @@ export default function LoginPage() {
                 <LogIn className="h-8 w-8 text-amber-600" />
               </div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Connexion</h1>
-              <p className="text-gray-600">Accédez à votre compte Shivashi</p>
+              <p className="text-gray-600">Access yo your account Shivashi</p>
             </div>
 
             {/* Formulaire */}
@@ -80,7 +80,7 @@ export default function LoginPage() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  placeholder="votre@email.com"
+                  placeholder="Name@email.com"
                   className="w-full"
                 />
               </div>
@@ -88,7 +88,7 @@ export default function LoginPage() {
               {/* Mot de passe */}
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                  Mot de passe
+                  Password
                 </label>
                 <div className="relative">
                   <Input
@@ -98,7 +98,7 @@ export default function LoginPage() {
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    placeholder="Votre mot de passe"
+                    placeholder="Your Password"
                     className="w-full pr-10"
                   />
                   <button
@@ -133,19 +133,19 @@ export default function LoginPage() {
 
             {/* Informations de test */}
             <div className="mt-8 p-4 bg-amber-50 rounded-lg border border-amber-200">
-              <h3 className="font-semibold text-amber-800 mb-2">Compte de test :</h3>
+              <h3 className="font-semibold text-amber-800 mb-2">Test Account :</h3>
               <p className="text-sm text-amber-700">
                 <strong>Email:</strong> admin@shivashi.com<br />
-                <strong>Mot de passe:</strong> password123
+                <strong>Password:</strong> password123
               </p>
             </div>
 
             {/* Lien d'inscription */}
             <div className="text-center mt-6 pt-6 border-t border-gray-200">
               <p className="text-gray-600">
-                Pas encore de compte ?{' '}
+                No account yet ?{' '}
                 <Link href="/auth/register" className="text-amber-600 hover:text-amber-700 font-semibold">
-                  Créer un compte
+                  Create account
                 </Link>
               </p>
             </div>

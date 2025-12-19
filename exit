@@ -1,0 +1,90 @@
+[33mcommit 196ef025530b8368ffc1420f99875194798832ea[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Mohammed <mblh3801@gmail.com>
+Date:   Tue Nov 4 06:41:13 2025 +0100
+
+    fix stripe keys
+
+[33mcommit b2cfbe6ed6eb754de9ded571f1ac9673a8df96b7[m[33m ([m[1;32mbackup-main[m[33m)[m
+Author: Mohammed <mblh3801@gmail.com>
+Date:   Mon Nov 3 12:57:28 2025 +0100
+
+    fix: remove hardcoded stripe keys and use environment variables
+
+[33mcommit 3c33a84bbbfdedcb7995c82db024bff37ea251ad[m
+Author: Mohammed <mblh3801@gmail.com>
+Date:   Mon Oct 27 07:57:33 2025 +0100
+
+    fix
+
+[33mcommit 6966c0e2dd5e0f7d744c2f878234abee80b6f746[m
+Author: Mohammed <mblh3801@gmail.com>
+Date:   Mon Oct 27 07:56:21 2025 +0100
+
+    fix: use valid stripe test keys
+
+[33mcommit 08a74c754504ebc04ac3e1e20c4380dba12fc01d[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Mohammed <mblh3801@gmail.com>
+Date:   Mon Oct 27 07:32:12 2025 +0100
+
+    fix
+
+[33mcommit cd0cd11892e580261bb51b06f7dcd0e43074cbc1[m
+Merge: 4eaf27e f5dcba7
+Author: Mohammed <mblh3801@gmail.com>
+Date:   Mon Oct 27 07:26:29 2025 +0100
+
+    version finale
+
+[33mcommit 4eaf27ea372700e2843aa3b54a9936ea8b745be1[m
+Author: Mohammed <mblh3801@gmail.com>
+Date:   Mon Oct 27 07:23:25 2025 +0100
+
+    version finale
+
+[33mcommit f5dcba732cd321cec66e2667affdcf7e0161e44c[m
+Author: medblh <94624972+medblh@users.noreply.github.com>
+Date:   Mon Oct 27 07:12:46 2025 +0100
+
+    Update page.tsx
+
+[33mcommit d611d45ad2aea29bb83aba471c0afdb024b173e0[m
+Author: medblh <94624972+medblh@users.noreply.github.com>
+Date:   Mon Oct 27 07:08:55 2025 +0100
+
+    Update page.tsx
+
+[33mcommit 9d2e703dca02a17fc91eb4ba56a66010e952ed7e[m
+Author: Mohammed <mblh3801@gmail.com>
+Date:   Sat Oct 25 11:31:42 2025 +0100
+
+    Description de vos modifications
+
+[33mcommit d8083c7b35dba992e2dd565f790fdee122ae6c15[m
+Author: Mohammed <mblh3801@gmail.com>
+Date:   Sat Oct 25 10:18:16 2025 +0100
+
+    fix: add suspense boundary to checkout success page
+
+[33mcommit b40304ccfa3180a0a70932da1ed8e1a3f5f69b15[m
+Author: Mohammed <mblh3801@gmail.com>
+Date:   Sat Oct 25 10:06:31 2025 +0100
+
+    fix: remove next.config.ts, keep only next.config.js
+
+[33mcommit 2c2b2fa8a30cd6cb437cc8ee7c59a1f13036af95[m
+Author: Mohammed <mblh3801@gmail.com>
+Date:   Sat Oct 25 09:58:52 2025 +0100
+
+    fix: add config files to disable eslint and typescript errors
+
+[33mcommit 6f39e648d99275ea56c39ff7976a8ca2b7bd4dd4[m
+Author: medblh <94624972+medblh@users.noreply.github.com>
+Date:   Fri Oct 24 14:25:10 2025 +0100
+
+    Update route.ts
+
+[33mcommit 7652068707c3641204e5cf8765560acd2d5c2f23[m
+Author: Mohammed <mblh3801@gmail.com>
+Date:   Fri Oct 24 14:03:40 2025 +0100
+
+    Initial commit - Site e-commerce Shivashi

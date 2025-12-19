@@ -1,6 +1,7 @@
 import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
+import { getColorHex } from '@/lib/colors';
 
 // Chemin vers la base de données
 const dbPath = path.join(process.cwd(), 'database.sqlite');
@@ -29,7 +30,7 @@ export function initializeDatabase() {
     )
   `);
 
-  // Table des produits (modifiée pour ajouter couleur)
+  // Table des produits (AVEC collection_name)
   db.exec(`
     CREATE TABLE IF NOT EXISTS products (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,14 +39,28 @@ export function initializeDatabase() {
       description TEXT NOT NULL,
       image TEXT NOT NULL,
       category TEXT NOT NULL,
-      color TEXT NOT NULL DEFAULT 'Noir',
+      collection_name TEXT DEFAULT 'default',
+      gender TEXT DEFAULT 'unisex',
       stock INTEGER DEFAULT 0,
       featured BOOLEAN DEFAULT FALSE,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
 
-  // Nouvelle table pour les variantes de taille et quantité
+  // Table : Couleurs des produits
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS product_colors (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      product_id INTEGER NOT NULL,
+      color_name TEXT NOT NULL,
+      color_hex TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE,
+      UNIQUE(product_id, color_name)
+    )
+  `);
+
+  // Table pour les variantes de taille et quantité
   db.exec(`
     CREATE TABLE IF NOT EXISTS product_variants (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -71,13 +86,15 @@ export function initializeDatabase() {
     )
   `);
 
-  // Table des items de commande (modifiée pour inclure taille)
+  // Table des items de commande
   db.exec(`
     CREATE TABLE IF NOT EXISTS order_items (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       order_id INTEGER NOT NULL,
       product_id INTEGER NOT NULL,
       size INTEGER NOT NULL,
+      color_name TEXT NOT NULL,
+      color_hex TEXT NOT NULL,
       quantity INTEGER NOT NULL,
       price DECIMAL(10,2) NOT NULL,
       FOREIGN KEY (order_id) REFERENCES orders (id),
@@ -104,18 +121,115 @@ export function initializeDatabase() {
 // Initialiser au démarrage
 initializeDatabase();
 
+// Migration pour ajouter les champs manquants
+export function migrateDatabase() {
+  const tableInfo = db.prepare("PRAGMA table_info(products)").all() as any[];
+  
+  // Vérifier et ajouter gender si nécessaire
+  const hasGenderColumn = tableInfo.some(column => column.name === 'gender');
+  if (!hasGenderColumn) {
+    console.log('🔄 Ajout de la colonne gender...');
+    db.exec(`ALTER TABLE products ADD COLUMN gender TEXT DEFAULT 'unisex'`);
+    
+    const products = db.prepare('SELECT id, category FROM products').all() as any[];
+    const updateProduct = db.prepare('UPDATE products SET gender = ? WHERE id = ?');
+    
+    products.forEach(product => {
+      let gender = 'unisex';
+      if (product.category.includes('boy') || product.category.includes('men')) {
+        gender = 'boy';
+      } else if (product.category.includes('girl') || product.category.includes('women')) {
+        gender = 'girl';
+      }
+      updateProduct.run(gender, product.id);
+    });
+    console.log('✅ Colonne gender ajoutée avec succès');
+  }
+
+  // Vérifier et ajouter collection_name si nécessaire
+  const hasCollectionColumn = tableInfo.some(column => column.name === 'collection_name');
+  if (!hasCollectionColumn) {
+    console.log('🔄 Ajout de la colonne collection_name...');
+    db.exec(`ALTER TABLE products ADD COLUMN collection_name TEXT DEFAULT 'default'`);
+    console.log('✅ Colonne collection_name ajoutée avec succès');
+  }
+
+  // Gérer la migration des couleurs si l'ancienne colonne color existe
+  const hasColorColumn = tableInfo.some(column => column.name === 'color');
+  if (hasColorColumn) {
+    console.log('🔄 Migration des couleurs vers la nouvelle table...');
+    
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS product_colors (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        product_id INTEGER NOT NULL,
+        color_name TEXT NOT NULL,
+        color_hex TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE,
+        UNIQUE(product_id, color_name)
+      )
+    `);
+
+    const productsWithColors = db.prepare('SELECT id, color FROM products').all() as any[];
+    const insertColor = db.prepare(`
+      INSERT INTO product_colors (product_id, color_name, color_hex)
+      VALUES (?, ?, ?)
+    `);
+
+    productsWithColors.forEach(product => {
+      if (product.color) {
+        const colorHex = getColorHex(product.color);
+        insertColor.run(product.id, product.color, colorHex);
+      }
+    });
+
+    // Recréer la table products sans la colonne color
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS products_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        price DECIMAL(10,2) NOT NULL,
+        description TEXT NOT NULL,
+        image TEXT NOT NULL,
+        category TEXT NOT NULL,
+        collection_name TEXT DEFAULT 'default',
+        gender TEXT DEFAULT 'unisex',
+        stock INTEGER DEFAULT 0,
+        featured BOOLEAN DEFAULT FALSE,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    db.exec(`
+      INSERT INTO products_new (id, name, price, description, image, category, collection_name, gender, stock, featured, created_at)
+      SELECT id, name, price, description, image, category, 'default', gender, stock, featured, created_at FROM products
+    `);
+
+    db.exec('DROP TABLE products');
+    db.exec('ALTER TABLE products_new RENAME TO products');
+    console.log('✅ Migration des couleurs terminée');
+  }
+}
+
+// Appeler la migration au démarrage
+migrateDatabase();
+
 // Peupler la base avec des données de test
 export function seedDatabase() {
-  // Vérifier si des produits existent déjà
   const productCount = db.prepare('SELECT COUNT(*) as count FROM products').get() as { count: number };
   
   if (productCount.count === 0) {
     console.log('📦 Peuplement de la base de données...');
     
-    // Insérer des produits de test
     const insertProduct = db.prepare(`
-      INSERT INTO products (name, price, description, image, category, color, stock, featured)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO products (name, price, description, image, category, collection_name, gender, stock, featured)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    const insertColor = db.prepare(`
+      INSERT INTO product_colors (product_id, color_name, color_hex)
+      VALUES (?, ?, ?)
     `);
 
     const insertVariant = db.prepare(`
@@ -130,9 +244,15 @@ export function seedDatabase() {
         description: 'Notre pièce signature, alliant tradition et modernité',
         image: '/images/product1.jpg',
         category: 'signature',
-        color: 'Noir',
+        collection_name: 'Collection Printemps-Été 2024',
+        gender: 'unisex',
         stock: 10,
-        featured: true
+        featured: true,
+        colors: [
+          { name: 'Noir', hex: '#000000' },
+          { name: 'Blanc', hex: '#FFFFFF' },
+          { name: 'Bleu Marine', hex: '#000080' }
+        ]
       },
       {
         name: 'Ligne Prestige',
@@ -140,9 +260,15 @@ export function seedDatabase() {
         description: 'Excellence artisanale dans chaque détail',
         image: '/images/product2.jpg',
         category: 'premium',
-        color: 'Blanc',
+        collection_name: 'Collection Prestige',
+        gender: 'boy',
         stock: 5,
-        featured: true
+        featured: true,
+        colors: [
+          { name: 'Blanc', hex: '#FFFFFF' },
+          { name: 'Rouge', hex: '#FF0000' },
+          { name: 'Vert', hex: '#008000' }
+        ]
       },
       {
         name: 'Série Héritage',
@@ -150,9 +276,15 @@ export function seedDatabase() {
         description: 'Un hommage à notre savoir-faire ancestral',
         image: '/images/product3.jpg',
         category: 'heritage',
-        color: 'Bleu Marine',
+        collection_name: 'Collection Héritage',
+        gender: 'girl',
         stock: 15,
-        featured: true
+        featured: true,
+        colors: [
+          { name: 'Bleu Marine', hex: '#000080' },
+          { name: 'Rose', hex: '#FFC0CB' },
+          { name: 'Violet', hex: '#800080' }
+        ]
       },
       {
         name: 'Édition Limitée',
@@ -160,9 +292,45 @@ export function seedDatabase() {
         description: 'Pièce exclusive numérotée et certifiée',
         image: '/images/product4.jpg',
         category: 'limited',
-        color: 'Rouge Bordeaux',
+        collection_name: 'Éditions Limitées',
+        gender: 'unisex',
         stock: 2,
-        featured: false
+        featured: false,
+        colors: [
+          { name: 'Rouge Bordeaux', hex: '#800020' },
+          { name: 'Or', hex: '#FFD700' }
+        ]
+      },
+      {
+        name: 'Moderne Urbain',
+        price: 349.99,
+        description: 'Style contemporain pour la ville',
+        image: '/images/product5.jpg',
+        category: 'urban',
+        collection_name: 'Collection Printemps-Été 2024',
+        gender: 'unisex',
+        stock: 8,
+        featured: true,
+        colors: [
+          { name: 'Gris', hex: '#808080' },
+          { name: 'Noir', hex: '#000000' }
+        ]
+      },
+      {
+        name: 'Chic Élégant',
+        price: 399.99,
+        description: 'Élégance raffinée pour occasions spéciales',
+        image: '/images/product6.jpg',
+        category: 'chic',
+        collection_name: 'Collection Prestige',
+        gender: 'girl',
+        stock: 12,
+        featured: false,
+        colors: [
+          { name: 'Rose', hex: '#FFC0CB' },
+          { name: 'Blanc', hex: '#FFFFFF' },
+          { name: 'Or', hex: '#FFD700' }
+        ]
       }
     ];
 
@@ -173,16 +341,19 @@ export function seedDatabase() {
         product.description,
         product.image,
         product.category,
-        product.color,
+        product.collection_name,
+        product.gender,
         product.stock,
         product.featured ? 1 : 0
       );
 
       const productId = Number(result.lastInsertRowid);
 
-      // Créer des variantes de taille pour chaque produit (tailles 2 à 10)
+      product.colors.forEach(color => {
+        insertColor.run(productId, color.name, color.hex);
+      });
+
       for (let size = 2; size <= 10; size++) {
-        // Quantité aléatoire entre 0 et 5 pour la démo
         const quantity = Math.floor(Math.random() * 6);
         insertVariant.run(productId, size, quantity);
       }
@@ -223,11 +394,22 @@ export function createUser(email: string, hashedPassword: string, name: string, 
 }
 
 // Fonctions pour les produits
-export function getAllProducts(filters?: { category?: string; search?: string; featured?: boolean; color?: string }) {
+export function getAllProducts(filters?: { 
+  category?: string; 
+  search?: string; 
+  featured?: boolean; 
+  color?: string; 
+  gender?: string; 
+  size?: number; 
+  minPrice?: number; 
+  maxPrice?: number;
+  collection_name?: string;
+}) {
   let query = `
     SELECT p.*, 
            SUM(pv.quantity) as total_stock,
-           GROUP_CONCAT(DISTINCT pv.size) as available_sizes
+           GROUP_CONCAT(DISTINCT pv.size) as available_sizes,
+           (SELECT GROUP_CONCAT(color_name) FROM product_colors WHERE product_id = p.id) as color_names
     FROM products p
     LEFT JOIN product_variants pv ON p.id = pv.product_id
     WHERE 1=1
@@ -240,8 +422,8 @@ export function getAllProducts(filters?: { category?: string; search?: string; f
   }
 
   if (filters?.search) {
-    query += ' AND (p.name LIKE ? OR p.description LIKE ?)';
-    params.push(`%${filters.search}%`, `%${filters.search}%`);
+    query += ' AND (p.name LIKE ? OR p.description LIKE ? OR p.collection_name LIKE ?)';
+    params.push(`%${filters.search}%`, `%${filters.search}%`, `%${filters.search}%`);
   }
 
   if (filters?.featured) {
@@ -249,23 +431,67 @@ export function getAllProducts(filters?: { category?: string; search?: string; f
   }
 
   if (filters?.color) {
-    query += ' AND p.color = ?';
+    query += ' AND p.id IN (SELECT product_id FROM product_colors WHERE color_name = ?)';
     params.push(filters.color);
+  }
+
+  if (filters?.gender) {
+    query += ' AND p.gender = ?';
+    params.push(filters.gender);
+  }
+
+  if (filters?.size) {
+    query += ' AND p.id IN (SELECT product_id FROM product_variants WHERE size = ? AND quantity > 0)';
+    params.push(filters.size);
+  }
+
+  if (filters?.minPrice) {
+    query += ' AND p.price >= ?';
+    params.push(filters.minPrice);
+  }
+
+  if (filters?.maxPrice) {
+    query += ' AND p.price <= ?';
+    params.push(filters.maxPrice);
+  }
+
+  if (filters?.collection_name) {
+    query += ' AND p.collection_name = ?';
+    params.push(filters.collection_name);
   }
 
   query += ' GROUP BY p.id ORDER BY p.created_at DESC';
 
-  return db.prepare(query).all(...params);
+  const products = db.prepare(query).all(...params) as any[];
+  
+  return products.map(product => {
+    const colors = db.prepare('SELECT * FROM product_colors WHERE product_id = ?').all(product.id);
+    return {
+      ...product,
+      colors
+    };
+  });
 }
 
 export function getProductById(id: number) {
   const product = db.prepare('SELECT * FROM products WHERE id = ?').get(id) as any;
   if (product) {
     const variants = db.prepare('SELECT * FROM product_variants WHERE product_id = ? ORDER BY size').all(id);
+    const colors = db.prepare('SELECT * FROM product_colors WHERE product_id = ?').all(id);
+    
     product.variants = variants;
+    product.colors = colors;
     product.total_stock = variants.reduce((sum: number, variant: any) => sum + variant.quantity, 0);
   }
   return product;
+}
+
+export function getProductsByCollection(collectionName: string) {
+  return db.prepare('SELECT * FROM products WHERE collection_name = ? ORDER BY created_at DESC').all(collectionName) as any[];
+}
+
+export function getProductColors(productId: number) {
+  return db.prepare('SELECT * FROM product_colors WHERE product_id = ?').all(productId);
 }
 
 export function getProductVariants(productId: number) {
@@ -282,25 +508,39 @@ export function createProduct(productData: {
   description: string;
   image: string;
   category: string;
-  color: string;
+  collection_name?: string;
+  gender: string;
   stock: number;
   featured: boolean;
+  colors: Array<{ name: string; hex: string }>;
 }) {
   const result = db.prepare(`
-    INSERT INTO products (name, price, description, image, category, color, stock, featured)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO products (name, price, description, image, category, collection_name, gender, stock, featured)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     productData.name,
     productData.price,
     productData.description,
     productData.image,
     productData.category,
-    productData.color,
+    productData.collection_name || 'default',
+    productData.gender,
     productData.stock,
     productData.featured ? 1 : 0
   );
   
-  return Number(result.lastInsertRowid);
+  const productId = Number(result.lastInsertRowid);
+
+  const insertColor = db.prepare(`
+    INSERT INTO product_colors (product_id, color_name, color_hex)
+    VALUES (?, ?, ?)
+  `);
+
+  productData.colors.forEach(color => {
+    insertColor.run(productId, color.name, color.hex);
+  });
+  
+  return productId;
 }
 
 export function createProductVariant(productId: number, size: number, quantity: number) {
@@ -328,7 +568,8 @@ export function updateProduct(id: number, productData: {
   description?: string;
   image?: string;
   category?: string;
-  color?: string;
+  collection_name?: string;
+  gender?: string;
   stock?: number;
   featured?: boolean;
 }) {
@@ -355,9 +596,13 @@ export function updateProduct(id: number, productData: {
     fields.push('category = ?');
     params.push(productData.category);
   }
-  if (productData.color) {
-    fields.push('color = ?');
-    params.push(productData.color);
+  if (productData.collection_name !== undefined) {
+    fields.push('collection_name = ?');
+    params.push(productData.collection_name);
+  }
+  if (productData.gender) {
+    fields.push('gender = ?');
+    params.push(productData.gender);
   }
   if (productData.stock !== undefined) {
     fields.push('stock = ?');
@@ -383,9 +628,8 @@ export function updateProduct(id: number, productData: {
 
 export function deleteProduct(id: number) {
   return db.transaction(() => {
-    // Supprimer d'abord les variantes
     db.prepare('DELETE FROM product_variants WHERE product_id = ?').run(id);
-    // Puis le produit
+    db.prepare('DELETE FROM product_colors WHERE product_id = ?').run(id);
     const result = db.prepare('DELETE FROM products WHERE id = ?').run(id);
     return result.changes;
   })();
@@ -411,12 +655,13 @@ export function createOrder(orderData: {
   items: Array<{
     productId: number;
     size: number;
+    colorName: string;
+    colorHex: string;
     quantity: number;
     price: number;
   }>;
 }) {
   return db.transaction(() => {
-    // Créer la commande
     const orderResult = db.prepare(`
       INSERT INTO orders (user_id, total, shipping_address, status)
       VALUES (?, ?, ?, 'pending')
@@ -424,16 +669,14 @@ export function createOrder(orderData: {
 
     const orderId = Number(orderResult.lastInsertRowid);
 
-    // Ajouter les items
     const insertItem = db.prepare(`
-      INSERT INTO order_items (order_id, product_id, size, quantity, price)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO order_items (order_id, product_id, size, color_name, color_hex, quantity, price)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `);
 
     orderData.items.forEach(item => {
-      insertItem.run(orderId, item.productId, item.size, item.quantity, item.price);
+      insertItem.run(orderId, item.productId, item.size, item.colorName, item.colorHex, item.quantity, item.price);
       
-      // Mettre à jour le stock de la variante
       db.prepare(`
         UPDATE product_variants 
         SET quantity = quantity - ? 
@@ -479,7 +722,7 @@ export function getRecentOrders(limit: number = 5) {
 // Fonctions pour la wishlist
 export function getWishlistByUserId(userId: number) {
   return db.prepare(`
-    SELECT w.*, p.name, p.price, p.description, p.image, p.category, p.color
+    SELECT w.*, p.name, p.price, p.description, p.image, p.category, p.gender, p.collection_name
     FROM wishlists w
     JOIN products p ON w.product_id = p.id
     WHERE w.user_id = ?
@@ -505,12 +748,46 @@ export function removeFromWishlist(userId: number, productId: number) {
   return result.changes;
 }
 
-// Nouvelles fonctions pour gérer les couleurs disponibles
-export function getAvailableColors() {
-  return db.prepare('SELECT DISTINCT color FROM products ORDER BY color').all();
+// Fonctions pour les couleurs disponibles
+export function getAvailableColors(): string[] {
+  try {
+    console.log('🔄 Database: Fetching available colors...');
+    const colors = db.prepare('SELECT DISTINCT color_name FROM product_colors ORDER BY color_name').all() as { color_name: string }[];
+    
+    const colorNames = colors.map(item => item.color_name);
+    console.log('✅ Database: Available colors:', colorNames);
+    
+    return colorNames;
+    
+  } catch (error) {
+    console.error('❌ Database: Error in getAvailableColors:', error);
+    return [];
+  }
 }
 
-// Nouvelles fonctions pour gérer les stocks par taille
+// Fonctions pour les collections
+export function getAllCollections() {
+  return db.prepare(`
+    SELECT DISTINCT collection_name 
+    FROM products 
+    WHERE collection_name IS NOT NULL AND collection_name != '' AND collection_name != 'default'
+    ORDER BY collection_name
+  `).all() as { collection_name: string }[];
+}
+
+export function getProductsByCollectionName(collectionName: string) {
+  const products = db.prepare('SELECT * FROM products WHERE collection_name = ? ORDER BY created_at DESC').all(collectionName) as any[];
+  
+  return products.map(product => {
+    const colors = db.prepare('SELECT * FROM product_colors WHERE product_id = ?').all(product.id);
+    return {
+      ...product,
+      colors
+    };
+  });
+}
+
+// Fonctions pour les stocks par taille
 export function getProductStockBySize(productId: number) {
   return db.prepare(`
     SELECT size, quantity 

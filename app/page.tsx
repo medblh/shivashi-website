@@ -1,227 +1,403 @@
 "use client";
-
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Shield, Truck, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import ProductCard from '@/components/ProductCard';
 import { mockProducts } from '@/lib/products';
-import { useState, useEffect } from 'react';
 
 export default function Home() {
-  const featuredProducts = mockProducts.slice(0, 3);
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const featuredProducts = mockProducts.slice(0, 6);
 
-  // Données du carousel
-  const carouselSlides = [
+  // Collections
+  const collections = [
     {
       id: 1,
-      title: "New Fall 2025 Collection",
-      subtitle: "Discover reinvented elegance",
-      image: "/images/hero.png",
-      buttonText: "Discover",
-      buttonLink: "/products/2"
+      title: "Everyday Set",
+      image: "/images/Everydayset.webp",
+      link: "/products?category=tops"
     },
     {
       id: 2,
-      title: "Exclusive Limited Edition",
-      subtitle: "Numbered unique pieces",
-      image: "/images/DSC09269.jpg",
-      buttonText: "Discover",
-      buttonLink: "/products/3"
-    }
-  ];
-
-  // Section Boys & Girls
-  const genderSections = [
-    {
-      id: 1,
-      title: "Boys Collection",
-      subtitle: "Style and confidence",
-      image: "/images/DSC09334.jpg",
-      link: "/products?category=boys",
-      bgGradient: "from-blue-500 to-blue-700"
+      title: "Cozy Set",
+      image: "/images/Cozyset.webp",
+      link: "/products?category=bottoms"
     },
     {
-      id: 2,
-      title: "Girls Collection", 
-      subtitle: "Elegance and charm",
-      image: "/images/DSC09271.jpg",
-      link: "/products?category=girls",
-      bgGradient: "from-pink-500 to-purple-600"
+      id: 3,
+      title: "Active Logo Set",
+      image: "/images/Activelogoset.webp",
+      link: "/products?category=accessories"
+    },
+    {
+      id: 4,
+      title: "Varsity Gril Set",
+      image: "/images/VarsityGirlset.webp",
+      link: "/new-arrivals"
     }
   ];
-
-  // Auto-slide du carousel
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % carouselSlides.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [carouselSlides.length]);
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % carouselSlides.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + carouselSlides.length) % carouselSlides.length);
-  };
+  // Values
+  const values = [
+    {
+      icon: "",
+      title: "SUSTAINABLE MATERIALS",
+      description: "ECO-FRIENDLY FABRICS THAT FEEL GOOD AND DO GOOD"
+    },
+    {
+      icon: "",
+      title: "GIVES BACK",
+      description: "EVERY PURCHASE SUPPORTS MEANINGFUL CAUSES"
+    },
+    {
+      icon: "",
+      title: "ETHICAL PRODUCTION",
+      description: "RESPONSIBLY MADE IN SAFE WORKING CONDITIONS"
+    }
+  ];
 
   return (
     <div className="min-h-screen">
-      {/* Hero Carousel */}
-      <section className="relative h-[95vh] overflow-hidden">
-        {carouselSlides.map((slide, index) => (
-          <div
-            key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              index === currentSlide ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            {/* Background Image avec overlay */}
-            <div 
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: `url(${slide.image})` }}
-            >
-              <div className="absolute inset-0 bg-black/40"></div>
-            </div>
-            
-            {/* Content */}
-            <div className="relative h-full flex items-center justify-center text-center text-white">
-              <div className="container mx-auto px-4">
-                <div className="max-w-2xl mx-auto">
-                  <div className="mb-4">
-                    <span className="bg-white/20 backdrop-blur-sm text-white/90 px-6 py-3 rounded-full text-lg font-medium border border-white/30">
-                      NEW Collection
-                    </span>
-                  </div>
-                  
-                  <h1 className="text-lg md:text-4xl font-bold mb-6 leading-tight">
-                    {slide.title}
-                  </h1>
-                  
-                  <p className="text-lg md:text-2xl mb-8 text-gray-200 leading-relaxed">
-                    {slide.subtitle}
-                  </p>
-                  
-                  <Button asChild size="lg" className="bg-amber-600 hover:bg-amber-700 text-white border-0 px-12 py-6 text-lg">
-                    <Link href={slide.buttonLink}>
-                      {slide.buttonText}
-                    </Link>
-                  </Button>
-                </div>
-              </div>
+      {/* Hero Section avec Vidéo en fond */}
+<section className="relative h-[80vh] lg:h-[90vh] overflow-hidden bg-black">
+  {/* Video Background WebM seul */}
+  <video
+    autoPlay
+    muted
+    loop
+    playsInline
+    className="absolute inset-0 w-full h-full object-cover opacity-100"
+    preload="metadata"
+  >
+    <source src="/images/shivashi-kids.webm" type="video/webm" />
+  </video>
+  
+  {/* Overlay sombre */}
+  <div className="absolute inset-0 bg-black/30"></div>
+  
+  {/* Contenu */}
+  <div className="relative h-full flex items-end justify-center text-center text-white pb-8 lg:pb-16">
+    <div className="container mx-auto px-4">
+      <div className="max-w-4xl mx-auto">
+        <Button
+          asChild
+          size="sm"
+          className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-6 py-3 text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
+        >
+          <a href="/products">
+            Shop Now
+          </a>
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+      <section className="w-full h-screen flex">
+  {/* Boys Category */}
+  <div className="relative flex-1 group overflow-hidden">
+    {/* Background Image */}
+    <div 
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105"
+      style={{ backgroundImage: 'url(/images/boys.png)' }}
+    >
+      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
+    </div>
+    
+    {/* Content */}
+    <div className="relative h-full flex flex-col items-start justify-center text-white p-8 lg:p-16">
+  <h3 className="text-4xl lg:text-5xl font-bold mb-6 tracking-wide">BOYS</h3>
+      <Button
+        asChild
+        className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-8 py-4 text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
+      >
+        <a href="/products/boys">
+          Discover Now
+        </a>
+      </Button>
+    </div>
+  </div>
+
+  {/* Girls Category */}
+  <div className="relative flex-1 group overflow-hidden">
+    {/* Background Image */}
+    <div 
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat h-250 transition-transform duration-500 group-hover:scale-105"
+      style={{ backgroundImage: 'url(/images/girls.png)' }}
+    >
+      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
+    </div>
+    
+    {/* Content */}
+    <div className="relative h-full flex flex-col items-end justify-center text-white p-8 lg:p-16">
+  <h3 className="text-4xl lg:text-5xl font-bold mb-6 tracking-wide">GIRLS</h3>
+      <Button
+        asChild
+        className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-8 py-4 text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
+      >
+        <a href="/products/girls">
+          Discover Now
+        </a>
+      </Button>
+    </div>
+  </div>
+</section>
+
+<section className="w-full h-screen flex">
+  {/* Boys Category */}
+  <div className="relative flex-1 group overflow-hidden">
+    {/* Background Image */}
+    <div 
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat h-250 transition-transform duration-500 group-hover:scale-105"
+      style={{ backgroundImage: 'url(/images/activewear.png)' }}
+    >
+      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
+    </div>
+    
+    {/* Content */}
+    <div className="relative h-full flex flex-col items-start justify-center text-white p-8 lg:p-16">
+  <h3 className="text-4xl lg:text-5xl font-bold mb-6 tracking-wide">ACTIVEWEAR</h3>
+      <Button
+        asChild
+        className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-8 py-4 text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
+      >
+        <a href="/products/boys">
+          Discover Now
+        </a>
+      </Button>
+    </div>
+  </div>
+
+  {/* Girls Category */}
+  <div className="relative flex-1 group overflow-hidden">
+    {/* Background Image */}
+    <div 
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat h-270 transition-transform duration-500 group-hover:scale-105"
+      style={{ backgroundImage: 'url(/images/loungewear.png)' }}
+    >
+      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
+    </div>
+    
+    {/* Content */}
+    <div className="relative h-full flex flex-col items-end justify-center text-white p-8 lg:p-16">
+  <h3 className="text-4xl lg:text-5xl font-bold mb-6 tracking-wide">LOUNGEWEAR</h3>
+      <Button
+        asChild
+        className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-8 py-4 text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
+      >
+        <a href="/products/girls">
+          Discover Now
+        </a>
+      </Button>
+    </div>
+  </div>
+</section>
+
+
+<section className="w-full h-screen flex">
+  {/* Best Sellers */}
+  <div className="relative flex-1 group overflow-hidden">
+    {/* Background Image */}
+    <div 
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat h-250 transition-transform duration-500 group-hover:scale-105"
+      style={{ backgroundImage: 'url(/images/20.webp)' }}
+    >
+      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
+    </div>
+    
+    {/* Content - Bouton en bas */}
+    <div className="relative h-full flex items-end justify-center text-center text-white pb-8 lg:pb-12">
+      <div className="w-full px-4">
+        <Button
+          asChild
+          className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-6 py-3 text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase w-full max-w-xs"
+        >
+          <a href="/best-sellers">
+            Best Sellers
+          </a>
+        </Button>
+      </div>
+    </div>
+  </div>
+
+  {/* New Arrivals */}
+  <div className="relative flex-1 group overflow-hidden">
+    {/* Background Image */}
+    <div 
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat h-250 transition-transform duration-500 group-hover:scale-105"
+      style={{ backgroundImage: 'url(/images/26.png)' }}
+    >
+      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
+    </div>
+    
+    {/* Content - Bouton en bas */}
+    <div className="relative h-full flex items-end justify-center text-center text-white pb-8 lg:pb-12">
+      <div className="w-full px-4">
+        <Button
+          asChild
+          className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-6 py-3 text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase w-full max-w-xs"
+        >
+          <a href="/new-arrivals">
+            New Arrivals
+          </a>
+        </Button>
+      </div>
+    </div>
+  </div>
+
+  {/* Categories */}
+  <div className="relative flex-1 group overflow-hidden">
+    {/* Background Image */}
+    <div 
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat h-200 transition-transform duration-500 group-hover:scale-105"
+      style={{ backgroundImage: 'url(/images/13.webp)' }}
+    >
+      <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
+    </div>
+    
+    {/* Content - Bouton en bas */}
+    <div className="relative h-full flex items-end justify-center text-center text-white pb-8 lg:pb-12">
+      <div className="w-full px-4">
+        <Button
+          asChild
+          className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-6 py-3 text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase w-full max-w-xs"
+        >
+          <a href="/categories">
+            Full collection
+          </a>
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+{/* Hero Section Statique */}
+      <section className="relative h-[80vh] lg:h-[90vh] overflow-hidden bg-gray-100">
+        {/* Background Image Statique */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat h-230"
+          style={{ backgroundImage: 'url(/images/banner.png)' }}
+        >
+          <div className="absolute inset-0 bg-black/30"></div>
+        </div>
+
+        {/* Content */}
+        <div className="relative h-full flex items-end justify-center text-center text-white pb-8 lg:pb-16">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <Button
+                asChild
+                size="sm"
+                className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-6 py-3 text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
+              >
+                <a href="/products">
+                  Shop Now
+                </a>
+              </Button>
             </div>
           </div>
-        ))}
-        
-        {/* Navigation arrows */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 transition-all duration-300 text-white"
-        >
-          <ChevronLeft className="h-6 w-6" />
-        </button>
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full p-3 transition-all duration-300 text-white"
-        >
-          <ChevronRight className="h-6 w-6" />
-        </button>
-        
-        {/* Indicators */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3">
-          {carouselSlides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentSlide ? 'bg-amber-400' : 'bg-white/50'
-              }`}
-            />
-          ))}
         </div>
       </section>
 
-      {/* Section Boys & Girls */}
-      <section className="py-20 bg-white">
+
+
+      {/* Values Section 
+      <section className="py-20 bg-black text-white" style={{ backgroundImage: `url('./images/hero.png')` }}>
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Special <span className="text-amber-600">Collections</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Discover our dedicated collections, designed for every personality
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+            {values.map((value, index) => (
+              <div key={index} className="px-6">
+                <div className="text-5xl mb-6">{value.icon}</div>
+                <h3 className="text-lg font-black mb-4 tracking-widest uppercase">
+                  {value.title}
+                </h3>
+                <p className="text-gray-300 text-sm leading-relaxed tracking-wide uppercase">
+                  {value.description}
+                </p>
+              </div>
+            ))}
           </div>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {genderSections.map((section) => (
-              <div key={section.id} className="group relative overflow-hidden rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-500">
-                {/* Background Image avec overlay dynamique */}
-                <div 
-                  className={`bg-gradient-to-br ${section.bgGradient} min-h-[500px] bg-cover bg-center bg-no-repeat relative`}
-                  style={{ backgroundImage: `url(${section.image})` }}
-                >
-                  <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-all duration-500"></div>
-                  
-                  {/* Content */}
-                  <div className="relative h-full flex items-center justify-center text-center text-white p-8">
-                    <div className="transform group-hover:scale-105 transition-transform duration-500">
-                      <h3 className="text-4xl md:text-5xl font-bold mb-4">
-                        {section.title}
-                      </h3>
-                      <p className="text-xl mb-6 text-gray-200">
-                        {section.subtitle}
-                      </p>
-                      <Button asChild size="lg" className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white">
-                        <Link href={section.link} className="flex items-center gap-2">
-                          Découvrir
-                          <ArrowRight className="h-5 w-5" />
-                        </Link>
-                      </Button>
-                    </div>
+        </div>
+      </section>*/}
+
+      {/* Collections Grid */}
+      <section className="bg-white">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-0">
+            {collections.map((collection) => (
+              <div key={collection.id} className="group relative overflow-hidden bg-gray-100">
+                <a href={collection.link}>
+                  <div 
+                    className="aspect-[3/4] bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105"
+                    style={{ backgroundImage: `url(${collection.image})` }}
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <h3 className="text-white font-black text-xl lg:text-xl tracking-widest uppercase text-center px-4">
+                      {collection.title}
+                    </h3>
                   </div>
-                </div>
-                
-                {/* Hover effect */}
-                <div className="absolute inset-0 border-2 border-transparent group-hover:border-amber-400/50 rounded-2xl transition-all duration-500"></div>
+                </a>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Section Collection Signature conservée */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+            
+
+
+      {/* Featured Products
+      <section className="py-20 bg-gray-950 text-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Collection <span className="text-amber-600">Signature</span>
+            <h2 className="text-4xl lg:text-5xl font-black mb-6 tracking-tight uppercase">
+              Best Sellers
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Discover our most iconic pieces, combining tradition and innovation
+            <p className="text-gray-300 max-w-2xl mx-auto tracking-wide uppercase text-sm">
+              Our most loved pieces, designed for comfort and style
             </p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {featuredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
-          
           <div className="text-center">
-            <Button asChild size="lg" variant="outline" className="border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white px-8 py-3">
-              <Link href="/products" className="flex items-center gap-2">
-                Voir Toute la Collection
+            <Button
+              asChild
+              size="lg"
+              className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-12 py-6 rounded-none font-black tracking-widest uppercase transition-all duration-300"
+            >
+              <a href="/products" className="flex items-center gap-3">
+                View All Products
                 <ArrowRight className="h-5 w-5" />
-              </Link>
+              </a>
             </Button>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      
+      {/* Newsletter 
+      <section className="py-20 bg-black text-white border-t border-gray-800">
+        <div className="container mx-auto px-4">
+          <div className="max-w-md mx-auto text-center">
+            <h3 className="text-3xl font-black mb-6 tracking-tight uppercase">
+              Join Our Community
+            </h3>
+            <p className="text-gray-300 mb-8 text-sm tracking-wide uppercase">
+              Get updates on new collections, exclusive offers, and sustainable living tips.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <input
+                type="email"
+                placeholder="ENTER YOUR EMAIL"
+                className="flex-1 px-4 py-4 border border-gray-600 bg-transparent rounded-none text-sm focus:outline-none focus:border-white tracking-wide placeholder-gray-400 uppercase"
+              />
+              <Button className="bg-white text-black hover:bg-gray-200 px-8 py-4 rounded-none font-black tracking-widest uppercase border-2 border-white">
+                Subscribe
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>*/}
     </div>
   );
 }

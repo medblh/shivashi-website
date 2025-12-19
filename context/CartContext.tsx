@@ -12,6 +12,8 @@ export interface CartProduct {
   size: number;
   quantity: number;
   color: string;
+  color_hex: string; // AJOUT: code couleur hex
+  gender: string;
   maxQuantity: number;
 }
 

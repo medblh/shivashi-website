@@ -39,7 +39,7 @@ export function TopBanner() {
   const current = messages[currentMessage];
 
   return (
-    <div className="bg-gradient-to-r from-green-800 to-green-700 text-white py-2 px-4 relative overflow-hidden">
+    <div className="text-white py-2 px-4 relative overflow-hidden" style={{ background: "rgb(52 58 64 / 95%)" }}>
       {/* Fond animé */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse"></div>
       

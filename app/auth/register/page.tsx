@@ -34,13 +34,13 @@ export default function RegisterPage() {
     }
 
     if (formData.password.length < 6) {
-      setError('Le mot de passe doit contenir au moins 6 caractères');
+      setError('The password must contain at least 6 characters');
       return;
     }
 
     const success = await register(formData.name, formData.email, formData.password);
     if (!success) {
-      setError("Erreur lors de la création du compte");
+      setError("Error creating account");
     }
   };
 
@@ -58,7 +58,7 @@ export default function RegisterPage() {
         <Button asChild variant="ghost" className="mb-8">
           <Link href="/" className="flex items-center space-x-2">
             <ArrowLeft className="h-4 w-4" />
-            <span>Retour à l'accueil</span>
+            <span>Back to Home</span>
           </Link>
         </Button>
 
@@ -69,8 +69,8 @@ export default function RegisterPage() {
               <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <UserPlus className="h-8 w-8 text-amber-600" />
               </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Inscription</h1>
-              <p className="text-gray-600">Rejoignez la communauté Shivashi</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Registration</h1>
+              <p className="text-gray-600">Join the Shivashi community</p>
             </div>
 
             {/* Formulaire */}
@@ -84,7 +84,7 @@ export default function RegisterPage() {
               {/* Nom */}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Nom complet
+                  Full name
                 </label>
                 <Input
                   type="text"
@@ -93,7 +93,7 @@ export default function RegisterPage() {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  placeholder="Votre nom complet"
+                  placeholder="Your full name"
                   className="w-full"
                 />
               </div>
@@ -110,7 +110,7 @@ export default function RegisterPage() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  placeholder="votre@email.com"
+                  placeholder="Name@email.com"
                   className="w-full"
                 />
               </div>
@@ -118,7 +118,7 @@ export default function RegisterPage() {
               {/* Mot de passe */}
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                  Mot de passe
+                  Password
                 </label>
                 <div className="relative">
                   <Input
@@ -128,7 +128,7 @@ export default function RegisterPage() {
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    placeholder="Au moins 6 caractères"
+                    placeholder="At least 6 characters"
                     className="w-full pr-10"
                   />
                   <button
@@ -144,7 +144,7 @@ export default function RegisterPage() {
               {/* Confirmation mot de passe */}
               <div>
                 <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
-                  Confirmer le mot de passe
+                  Confirm password
                 </label>
                 <Input
                   type={showPassword ? 'text' : 'password'}
@@ -153,7 +153,7 @@ export default function RegisterPage() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required
-                  placeholder="Confirmez votre mot de passe"
+                  placeholder="Confirm your password"
                   className="w-full"
                 />
               </div>
@@ -162,17 +162,17 @@ export default function RegisterPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3"
+                className="w-full bg-ambe-600 hover:bg-amber-700 text-white py-3"
               >
                 {isLoading ? (
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Création du compte...</span>
+                    <span>Creating account...</span>
                   </div>
                 ) : (
                   <div className="flex items-center space-x-2">
                     <UserPlus className="h-4 w-4" />
-                    <span>Créer mon compte</span>
+                    <span>Create my account</span>
                   </div>
                 )}
               </Button>
@@ -181,9 +181,9 @@ export default function RegisterPage() {
             {/* Lien de connexion */}
             <div className="text-center mt-6 pt-6 border-t border-gray-200">
               <p className="text-gray-600">
-                Déjà un compte ?{' '}
+                Already have an account?{' '}
                 <Link href="/auth/login" className="text-amber-600 hover:text-amber-700 font-semibold">
-                  Se connecter
+                  Log in
                 </Link>
               </p>
             </div>

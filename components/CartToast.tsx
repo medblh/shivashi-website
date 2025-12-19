@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from 'react';
-import { Check, X } from 'lucide-react';
+import { Check, X, Users } from 'lucide-react';
 
 interface CartToastProps {
   isVisible: boolean;
@@ -11,6 +11,8 @@ interface CartToastProps {
   productImage: string;
   productSize?: number | null;
   productColor?: string;
+  productColorHex?: string; // AJOUT: propriété pour le code couleur hexadécimal
+  productGender?: string;
   quantity?: number;
 }
 
@@ -22,6 +24,8 @@ export function CartToast({
   productImage,
   productSize,
   productColor,
+  productColorHex, // AJOUT
+  productGender,
   quantity = 1
 }: CartToastProps) {
   useEffect(() => {
@@ -33,6 +37,16 @@ export function CartToast({
       return () => clearTimeout(timer);
     }
   }, [isVisible, onClose]);
+
+  // Fonction pour formater le genre en français
+  const formatGender = (gender: string) => {
+    switch (gender) {
+      case 'boy': return 'Garçon';
+      case 'girl': return 'Fille';
+      case 'unisex': return 'Unisexe';
+      default: return gender;
+    }
+  };
 
   if (!isVisible) return null;
 
@@ -77,7 +91,24 @@ export function CartToast({
                 {productColor && (
                   <div className="flex items-center gap-2">
                     <span className="font-medium">Couleur:</span>
-                    <span>{productColor}</span>
+                    <div className="flex items-center gap-1">
+                      <div 
+                        className="w-4 h-4 rounded-full border border-gray-300"
+                        style={{ backgroundColor: productColorHex || '#CCCCCC' }} // CORRECTION: utilisation de productColorHex
+                        title={productColor}
+                      />
+                    </div>
+                  </div>
+                )}
+                
+                {/* Affichage du genre */}
+                {productGender && (
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">Genre:</span>
+                    <span className="flex items-center gap-1">
+                      <Users className="h-3 w-3" />
+                      {formatGender(productGender)}
+                    </span>
                   </div>
                 )}
                 

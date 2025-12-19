@@ -1,90 +1,56 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/database';
-import { getAllProducts, createProduct } from '@/lib/database';
-import { StatusCodes } from 'http-status-codes';
-import { verifySession } from '@/lib/auth-utils';
+import { mockProducts } from '@/lib/products';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
+    
+    // Filtrer les produits si des paramètres sont présents
+    let filteredProducts = mockProducts;
+
     const category = searchParams.get('category');
     const search = searchParams.get('search');
-    const featured = searchParams.get('featured');
+    const color = searchParams.get('color');
+    const gender = searchParams.get('gender');
+    const collection = searchParams.get('collection_name');
 
-    const products = getAllProducts({
-      category: category || undefined,
-      search: search || undefined,
-      featured: featured === 'true'
-    });
-
-    return NextResponse.json({
-      products,
-      total: products.length
-    });
-
-  } catch (error) {
-    console.error('Get products error:', error);
-    
-    return NextResponse.json(
-      { error: 'Erreur lors de la récupération des produits' },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR }
-    );
-  }
-}
-
-// ... (le reste du code POST reste similaire mais utilise createProduct)
-
-export async function POST(request: NextRequest) {
-  try {
-    // Vérifier la session
-    const session = await verifySession();
-    if (!session.isAuth || session.userRole !== 'admin') {
-      return NextResponse.json(
-        { error: 'Non autorisé' },
-        { status: StatusCodes.UNAUTHORIZED }
+    if (category) {
+      filteredProducts = filteredProducts.filter(p => 
+        p.category.toLowerCase() === category.toLowerCase()
       );
     }
 
-    const body = await request.json();
-    
-    // Validation basique
-    if (!body.name || !body.price || !body.description) {
-      return NextResponse.json(
-        { error: 'Données manquantes' },
-        { status: StatusCodes.BAD_REQUEST }
+    if (search) {
+      filteredProducts = filteredProducts.filter(p =>
+        p.name.toLowerCase().includes(search.toLowerCase()) ||
+        p.description.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    // Insérer le produit
-    const result = db.prepare(`
-      INSERT INTO products (name, price, description, image, category, stock, featured)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `).run(
-      body.name,
-      body.price,
-      body.description,
-      body.image || '/images/default.jpg',
-      body.category || 'general',
-      body.stock || 0,
-      body.featured ? 1 : 0
-    );
+    if (color) {
+      filteredProducts = filteredProducts.filter(p =>
+        p.colors.some(c => c.color_name.toLowerCase() === color.toLowerCase())
+      );
+    }
 
-    const product = db.prepare('SELECT * FROM products WHERE id = ?').get(result.lastInsertRowid);
+    if (gender) {
+      filteredProducts = filteredProducts.filter(p => 
+        p.gender.toLowerCase() === gender.toLowerCase()
+      );
+    }
 
-    return NextResponse.json(
-      { 
-        message: 'Produit créé avec succès',
-        product 
-      },
-      { status: StatusCodes.CREATED }
-    );
+    if (collection) {
+      filteredProducts = filteredProducts.filter(p =>
+        p.collection_name.toLowerCase().includes(collection.toLowerCase())
+      );
+    }
 
+    return NextResponse.json(filteredProducts);
   } catch (error) {
-    console.error('Create product error:', error);
-    
+    console.error('Error fetching products:', error);
     return NextResponse.json(
-      { error: 'Erreur lors de la création du produit' },
-      { status: StatusCodes.INTERNAL_SERVER_ERROR }
+      { error: 'Internal server error' },
+      { status: 500 }
     );
   }
 }
