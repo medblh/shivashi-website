@@ -1,14 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   typescript: {
     ignoreBuildErrors: true,
   },
   images: {
     unoptimized: true
+  },
+  // Disable Turbopack for production build
+  experimental: {
+    turbo: false
   }
 }
 
-module.exports = nextConfig
+module.exports = nextConfig;
