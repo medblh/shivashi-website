@@ -205,7 +205,7 @@ export const mockProducts: Product[] = [
     name: "Everyday Hoodie",
     price: 299.99,
     description: "a soft and cozy hoodie made for everyday adventures. Designed with a relaxed fit, it features a front kangaroo pocket, ribbed cuffs, and hem for a snug feel. Crafted from premium cotton for comfort and durability perfect for layering or wearing on its own.",
-    image: "/images/hoodieimage.jpg",
+    image: "/images/Hoodieimage.jpg",
     gallery: [ 
       "/images/every3.jpg",
       "/images/every4.jpg",
