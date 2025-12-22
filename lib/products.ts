@@ -316,7 +316,7 @@ export const mockProducts: Product[] = [
     price: 60.00,
     description: "A soft and easy pullover designed for relaxed days. The Cozy Sweat features a comfortable, oversized fit with ribbed cuffs and hem, crafted from premium cotton for a gentle touch on the skin. Perfect for layering or pairing with our matching Track Pants for a complete look.", 
     image: "/images/cozysweat.jpg",
-    gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
+    gallery: [
       "/images/DSC09334.jpg",
       "/images/DSC09335.jpg",
       "/images/DSC09336.jpg",
@@ -382,7 +382,7 @@ export const mockProducts: Product[] = [
     price: 199.99,
     description: "Soft, simple, and effortlessly stylish. The Logo Tee features a relaxed, boxy fit with a crew neckline and subtle Shivashi logo detail. Lightweight and breathable, perfect for every adventure.",
     image: "/images/logoshirt.jpg",
-    gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
+    gallery: [
       "/images/DSC09334.jpg",
       "/images/DSC09335.jpg",
       "/images/DSC09336.jpg",
