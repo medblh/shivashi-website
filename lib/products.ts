@@ -4,7 +4,7 @@ export interface Product {
   price: number;
   description: string;
   image: string;
-  gallery?: string[]; // ← AJOUTER CETTE LIGNE POUR LA GALERIE
+  gallery?: string[];
   category: string;
   collection_name: string;
   colors: ProductColor[];
@@ -205,7 +205,7 @@ export const mockProducts: Product[] = [
     name: "Everyday Hoodie",
     price: 299.99,
     description: "a soft and cozy hoodie made for everyday adventures. Designed with a relaxed fit, it features a front kangaroo pocket, ribbed cuffs, and hem for a snug feel. Crafted from premium cotton for comfort and durability perfect for layering or wearing on its own.",
-    image: "/images/every3.jpg",
+    image: "/images/hoodieimage.jpg",
     gallery: [ 
       "/images/every3.jpg",
       "/images/every4.jpg",
@@ -243,7 +243,7 @@ export const mockProducts: Product[] = [
     name: "Everyday Short", 
     price: 459.99,
     description: "Comfortable and stylish shorts designed for active little ones. Featuring an elastic waistband with an adjustable drawstring for the perfect fit, these shorts are made from soft cotton fabric to keep kids cool and comfy all day long.",
-    image: "/images/every1.jpg",
+    image: "/images/shortimage.jpg",
     gallery: [ 
       "/images/short.jpg",
       "/images/short1.jpg",
@@ -277,7 +277,7 @@ export const mockProducts: Product[] = [
     name: "Relaxed tee",
     price: 199.99,
     description: "A timeless everyday essential with a laid-back fit and soft touch. The Relaxed Tee is crafted from premiumcotton, offering breathability and comfort for playtime, lounging, or layering. Designed with a classic crew neckline and short sleeves for an easy, effortless look.",
-    image: "/images/shirt.jpg",
+    image: "/images/shirt2.jpg",
     gallery: [
       "/images/shirt.jpg",
       "/images/shirt1.jpg",
@@ -311,11 +311,41 @@ export const mockProducts: Product[] = [
     ]
   },
   {
+    id: 10,
+    name: "Cozy Sweat",
+    price: 60.00,
+    description: "A soft and easy pullover designed for relaxed days. The Cozy Sweat features a comfortable, oversized fit with ribbed cuffs and hem, crafted from premium cotton for a gentle touch on the skin. Perfect for layering or pairing with our matching Track Pants for a complete look.", 
+    image: "/images/cozysweat.jpg",
+    gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
+      "/images/DSC09334.jpg",
+      "/images/DSC09335.jpg",
+      "/images/DSC09336.jpg",
+      "/images/DSC09337.jpg"
+    ],
+    category: "limited",
+    collection_name: "Cozy Set",
+    colors: [
+      { id: 35, product_id: 10, color_name: "or", color_hex: "#FFD700", created_at: new Date().toISOString() },
+      { id: 36, product_id: 10, color_name: "argent", color_hex: "#C0C0C0", created_at: new Date().toISOString() }
+    ],
+    gender: "unisex",
+    stock: 2,
+    featured: false,
+    created_at: new Date().toISOString(),
+    total_stock: 2,
+    available_sizes: "4,5,6",
+    variants: [
+      { id: 78, product_id: 10, size: 4, quantity: 1, created_at: new Date().toISOString() },
+      { id: 79, product_id: 10, size: 5, quantity: 1, created_at: new Date().toISOString() },
+      { id: 80, product_id: 10, size: 6, quantity: 0, created_at: new Date().toISOString() }
+    ]
+  },
+  {
     id: 4,
     name: "Cozy Track Pant",
     price: 199.99,
     description: "Designed for movement and comfort, the Track Pants bring effortless style to everyday play. Crafted from soft cotton with a relaxed, straight-leg fit, they feature an elastic waistband and drawstring for the perfect fit. The minimal design makes them easy to pair with any top — especially our matching Cozy Sweat.",
-    image: "/images/IMG_20250928_15502664.jpg",
+    image: "/images/cozypant.jpg",
     gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
       "/images/DSC09334.jpg",
       "/images/DSC09335.jpg",
@@ -351,7 +381,7 @@ export const mockProducts: Product[] = [
     name: "Logo Tee",
     price: 199.99,
     description: "Soft, simple, and effortlessly stylish. The Logo Tee features a relaxed, boxy fit with a crew neckline and subtle Shivashi logo detail. Lightweight and breathable, perfect for every adventure.",
-    image: "/images/IMG_20250928_15502664.jpg",
+    image: "/images/logoshirt.jpg",
     gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
       "/images/DSC09334.jpg",
       "/images/DSC09335.jpg",
@@ -389,7 +419,7 @@ export const mockProducts: Product[] = [
     name: "Logo bike short",
     price: 199.99,
     description: "Play, stretch, and move with ease. The Logo Bike Shorts feature a flattering high-rise logo waistband and a soft stretch cotton finish for total comfort. Designed for active days and endless play.",
-    image: "/images/IMG_20250928_15502664.jpg",
+    image: "/images/logoshort.jpg",
     gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
       "/images/DSC09334.jpg",
       "/images/DSC09335.jpg",
@@ -427,7 +457,7 @@ export const mockProducts: Product[] = [
     name: "Logo Legging",
     price: 199.99,
     description: "Play, stretch, and move with ease. The Logo Bike Shorts feature a flattering high-rise logo waistband and a soft stretch cotton finish for total comfort. Designed for active days and endless play.",
-    image: "/images/IMG_20250928_15502664.jpg",
+    image: "/images/logopant.jpg",
     gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
       "/images/DSC09334.jpg",
       "/images/DSC09335.jpg",
@@ -459,113 +489,9 @@ export const mockProducts: Product[] = [
       { id: 58, product_id: 7, size: 9, quantity: 0, created_at: new Date().toISOString() },
       { id: 59, product_id: 7, size: 10, quantity: 0, created_at: new Date().toISOString() }
     ]
-  },
-  {
-    id: 8,
-    name: "Varsity Tee",
-    price: 199.99,
-    description: "A playful twist on a classic tee. The Varsity Tee features contrast sleeves and a bold back graphic, giving it a sporty edge while keeping the fit relaxed and comfy. Perfect for everyday adventures or pairing with our Poc",
-    image: "/images/IMG_20250928_15502664.jpg",
-    gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
-      "/images/DSC09334.jpg",
-      "/images/DSC09335.jpg",
-      "/images/DSC09336.jpg",
-      "/images/DSC09337.jpg"
-    ],
-    category: "T-shirt", 
-    collection_name: "Varsity Gril Set",
-    colors: [
-      { id: 27, product_id: 8, color_name: "ivory", color_hex: "#FFFFF0", created_at: new Date().toISOString() },
-      { id: 28, product_id: 8, color_name: "soft pink", color_hex: "#FDB0C0", created_at: new Date().toISOString() },
-      { id: 29, product_id: 8, color_name: "camel beige", color_hex: "#C7AA82", created_at: new Date().toISOString() },
-      { id: 30, product_id: 8, color_name: "chocolate brown", color_hex: "#7B3F00", created_at: new Date().toISOString() }
-    ],
-    gender: "girl",
-    stock: 15,
-    featured: true,
-    created_at: new Date().toISOString(),
-    total_stock: 15,
-    available_sizes: "2,3,4,5,6,7,8,9,10",
-    variants: [
-      { id: 60, product_id: 8, size: 2, quantity: 2, created_at: new Date().toISOString() },
-      { id: 61, product_id: 8, size: 3, quantity: 3, created_at: new Date().toISOString() },
-      { id: 62, product_id: 8, size: 4, quantity: 3, created_at: new Date().toISOString() },
-      { id: 63, product_id: 8, size: 5, quantity: 2, created_at: new Date().toISOString() },
-      { id: 64, product_id: 8, size: 6, quantity: 2, created_at: new Date().toISOString() },
-      { id: 65, product_id: 8, size: 7, quantity: 2, created_at: new Date().toISOString() },
-      { id: 66, product_id: 8, size: 8, quantity: 1, created_at: new Date().toISOString() },
-      { id: 67, product_id: 8, size: 9, quantity: 0, created_at: new Date().toISOString() },
-      { id: 68, product_id: 8, size: 10, quantity: 0, created_at: new Date().toISOString() }
-    ]
-  },
-  {
-    id: 9,
-    name: "Pocket Skirt",
-    price: 199.99,
-    description: "Designed for movement and charm, the Pocket Skirt features a relaxed A-line shape with side patch pockets, stylish yet practical. Made from soft cotton with a comfy elastic waistband for an easy fit, perfect for school or play.",
-    image: "/images/IMG_20250928_15502664.jpg",
-    gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
-      "/images/DSC09334.jpg",
-      "/images/DSC09335.jpg",
-      "/images/DSC09336.jpg",
-      "/images/DSC09337.jpg"
-    ],
-    category: "T-shirt", 
-    collection_name: "Varsity Gril Set",
-    colors: [
-      { id: 31, product_id: 9, color_name: "ivory", color_hex: "#FFFFF0", created_at: new Date().toISOString() },
-      { id: 32, product_id: 9, color_name: "soft pink", color_hex: "#FDB0C0", created_at: new Date().toISOString() },
-      { id: 33, product_id: 9, color_name: "camel beige", color_hex: "#C7AA82", created_at: new Date().toISOString() },
-      { id: 34, product_id: 9, color_name: "chocolate brown", color_hex: "#7B3F00", created_at: new Date().toISOString() }
-    ],
-    gender: "girl",
-    stock: 15,
-    featured: true,
-    created_at: new Date().toISOString(),
-    total_stock: 15,
-    available_sizes: "2,3,4,5,6,7,8,9,10",
-    variants: [
-      { id: 69, product_id: 9, size: 2, quantity: 2, created_at: new Date().toISOString() },
-      { id: 70, product_id: 9, size: 3, quantity: 3, created_at: new Date().toISOString() },
-      { id: 71, product_id: 9, size: 4, quantity: 3, created_at: new Date().toISOString() },
-      { id: 72, product_id: 9, size: 5, quantity: 2, created_at: new Date().toISOString() },
-      { id: 73, product_id: 9, size: 6, quantity: 2, created_at: new Date().toISOString() },
-      { id: 74, product_id: 9, size: 7, quantity: 2, created_at: new Date().toISOString() },
-      { id: 75, product_id: 9, size: 8, quantity: 1, created_at: new Date().toISOString() },
-      { id: 76, product_id: 9, size: 9, quantity: 0, created_at: new Date().toISOString() },
-      { id: 77, product_id: 9, size: 10, quantity: 0, created_at: new Date().toISOString() }
-    ]
-  },
-  {
-    id: 10,
-    name: "Cozy Sweat",
-    price: 60.00,
-    description: "A soft and easy pullover designed for relaxed days. The Cozy Sweat features a comfortable, oversized fit with ribbed cuffs and hem, crafted from premium cotton for a gentle touch on the skin. Perfect for layering or pairing with our matching Track Pants for a complete look.", 
-    image: "/images/IMG_20250928_15522292.jpg",
-    gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
-      "/images/DSC09334.jpg",
-      "/images/DSC09335.jpg",
-      "/images/DSC09336.jpg",
-      "/images/DSC09337.jpg"
-    ],
-    category: "limited",
-    collection_name: "Cozy Set",
-    colors: [
-      { id: 35, product_id: 10, color_name: "or", color_hex: "#FFD700", created_at: new Date().toISOString() },
-      { id: 36, product_id: 10, color_name: "argent", color_hex: "#C0C0C0", created_at: new Date().toISOString() }
-    ],
-    gender: "unisex",
-    stock: 2,
-    featured: false,
-    created_at: new Date().toISOString(),
-    total_stock: 2,
-    available_sizes: "4,5,6",
-    variants: [
-      { id: 78, product_id: 10, size: 4, quantity: 1, created_at: new Date().toISOString() },
-      { id: 79, product_id: 10, size: 5, quantity: 1, created_at: new Date().toISOString() },
-      { id: 80, product_id: 10, size: 6, quantity: 0, created_at: new Date().toISOString() }
-    ]
   }
+
+  
 ];
 
 

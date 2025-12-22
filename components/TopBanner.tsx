@@ -3,10 +3,12 @@
 
 import { useState, useEffect } from 'react';
 import { X, Truck, Shield, RotateCcw, Gift } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 export function TopBanner() {
   const [isVisible, setIsVisible] = useState(true);
   const [currentMessage, setCurrentMessage] = useState(0);
+  const pathname = usePathname();
 
   const messages = [
     {
@@ -34,7 +36,8 @@ export function TopBanner() {
     return () => clearInterval(interval);
   }, [messages.length]);
 
-  if (!isVisible) return null;
+  // Ne pas afficher si pas sur la page d'accueil
+  if (pathname !== '/' || !isVisible) return null;
 
   const current = messages[currentMessage];
 

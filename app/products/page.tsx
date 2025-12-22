@@ -270,7 +270,7 @@ export default function ProductsPage() {
                   <CardContent className="p-0">
                     {/* Image du produit */}
                     <Link href={`/products/${product.id}`}>
-                      <div className="relative h-64 w-full overflow-hidden bg-gradient-to-br from-amber-50 to-amber-100">
+                      <div className="relative h-95 w-full overflow-hidden bg-gradient-to-br from-amber-50 to-amber-100">
                         {product.image ? (
                           <div className="relative w-full h-full">
                             <Image
