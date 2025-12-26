@@ -60,10 +60,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Category Split Sections */}
-      <div className="flex flex-col lg:flex-row">
+      {/* Category Split Sections - MODIFIÉ */}
+      <div className="flex flex-row"> {/* Changé de flex-col lg:flex-row à flex-row */}
         {/* Boys Category */}
-        <div className="relative w-full lg:w-1/2 h-[50vh] lg:h-screen group overflow-hidden">
+        <div className="relative w-1/2 h-[50vh] lg:h-screen group overflow-hidden"> {/* Changé w-full lg:w-1/2 à w-1/2 */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105"
             style={{ backgroundImage: 'url(/images/boys.png)' }}
@@ -85,7 +85,7 @@ export default function Home() {
         </div>
 
         {/* Girls Category */}
-        <div className="relative w-full lg:w-1/2 h-[50vh] lg:h-screen group overflow-hidden">
+        <div className="relative w-1/2 h-[50vh] lg:h-screen group overflow-hidden"> {/* Changé w-full lg:w-1/2 à w-1/2 */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105"
             style={{ backgroundImage: 'url(/images/girls.png)' }}
@@ -107,10 +107,10 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Activewear & Loungewear */}
-      <div className="flex flex-col lg:flex-row">
+      {/* Activewear & Loungewear - MODIFIÉ */}
+      <div className="flex flex-row"> {/* Changé de flex-col lg:flex-row à flex-row */}
         {/* Activewear */}
-        <div className="relative w-full lg:w-1/2 h-[50vh] lg:h-screen group overflow-hidden">
+        <div className="relative w-1/2 h-[50vh] lg:h-screen group overflow-hidden"> {/* Changé w-full lg:w-1/2 à w-1/2 */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105"
             style={{ backgroundImage: 'url(/images/activewear.png)' }}
@@ -132,7 +132,7 @@ export default function Home() {
         </div>
 
         {/* Loungewear */}
-        <div className="relative w-full lg:w-1/2 h-[50vh] lg:h-screen group overflow-hidden">
+        <div className="relative w-1/2 h-[50vh] lg:h-screen group overflow-hidden"> {/* Changé w-full lg:w-1/2 à w-1/2 */}
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-105"
             style={{ backgroundImage: 'url(/images/loungewear.png)' }}

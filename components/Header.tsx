@@ -256,7 +256,7 @@ export default function Header() {
                     <form onSubmit={handleSearch} className="flex space-x-2">
                       <input
                         type="text"
-                        placeholder="Rechercher un produit..."
+                        placeholder="Search..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -411,7 +411,7 @@ export default function Header() {
                 <form onSubmit={handleSearch} className="flex space-x-2">
                   <input
                     type="text"
-                    placeholder="Rechercher un produit..."
+                    placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -575,7 +575,7 @@ export default function Header() {
                   <form onSubmit={handleSearch} className="flex space-x-2">
                     <input
                       type="text"
-                      placeholder="Rechercher un produit..."
+                      placeholder="Search..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
