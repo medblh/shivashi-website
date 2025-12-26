@@ -24,12 +24,14 @@ export default function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [availableSizes, setAvailableSizes] = useState<number[]>([]);
   
-  // État pour le sidebar du guide des tailles
-  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
-
   // États pour la galerie d'images
   const [selectedImage, setSelectedImage] = useState<string>('');
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [defaultGallery, setDefaultGallery] = useState<string[]>([]);
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // État pour le sidebar du guide des tailles
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
 
   // Mapping des collections aux images de guide des tailles
   const sizeGuideImages: Record<string, string> = {
@@ -47,6 +49,40 @@ export default function ProductPage() {
     const textColor = '9ca3af'; // gray-400
     const defaultText = `${width}×${height}`;
     return `https://via.placeholder.com/${width}x${height}/${bgColor}/${textColor}?text=${text || defaultText}`;
+  };
+
+  // Fonction pour obtenir les images d'une couleur spécifique
+  const getColorGallery = (color: ProductColor): string[] => {
+    // Si la couleur a sa propre galerie, l'utiliser
+    if (color.gallery && color.gallery.length > 0) {
+      return color.gallery;
+    }
+    
+    // Sinon, générer des images basées sur la couleur
+    if (product) {
+      // Générer des URLs d'images basées sur le nom de la couleur et du produit
+      const colorName = color.color_name.toLowerCase().replace(/\s+/g, '-');
+      const productName = product.name.toLowerCase().replace(/\s+/g, '-');
+      
+      // Essayer différentes combinaisons d'URLs
+      const possibleImages = [
+        `/images/products/${productName}-${colorName}-1.jpg`,
+        `/images/products/${product.id}-${color.id}-1.jpg`,
+        `/images/${productName}-${colorName}.jpg`,
+        `/images/products/${colorName}-1.jpg`,
+      ];
+      
+      // Filtrer les URLs qui pourraient exister (pour l'instant, on utilise des placeholders)
+      // En attendant que vous ayez les vraies images, on utilise des placeholders avec le nom de la couleur
+      return [
+        getPlaceholderImage(800, 1000, `${product.name}+${color.color_name}+1`),
+        getPlaceholderImage(800, 1000, `${product.name}+${color.color_name}+2`),
+        getPlaceholderImage(800, 1000, `${product.name}+${color.color_name}+3`),
+        getPlaceholderImage(800, 1000, `${product.name}+${color.color_name}+4`),
+      ];
+    }
+    
+    return [];
   };
 
   useEffect(() => {
@@ -81,13 +117,39 @@ export default function ProductPage() {
               setSelectedColor(productData.colors[0]);
             }
 
-            // Définir l'image sélectionnée initiale avec l'image principale du produit
-            const initialImage = productData.image || getPlaceholderImage(800, 1000, 'Product+Image');
-            setSelectedImage(initialImage);
+            // Initialiser la galerie d'images
+            let initialGallery: string[] = [];
+            let initialSelectedImage = '';
+            
+            // Stocker la galerie par défaut du produit
+            if (productData.gallery && productData.gallery.length > 0) {
+              setDefaultGallery(productData.gallery);
+              initialGallery = productData.gallery;
+              initialSelectedImage = productData.gallery[0];
+            } else {
+              // Fallback avec l'image principale
+              const mainImage = productData.image || getPlaceholderImage(800, 1000, 'Product+Image');
+              const fallbackGallery = [mainImage];
+              setDefaultGallery(fallbackGallery);
+              initialGallery = fallbackGallery;
+              initialSelectedImage = mainImage;
+            }
+            
+            // Si le produit a des couleurs, utiliser la galerie de la première couleur
+            if (productData.colors && productData.colors[0]) {
+              const firstColorGallery = getColorGallery(productData.colors[0]);
+              if (firstColorGallery.length > 0) {
+                initialGallery = firstColorGallery;
+                initialSelectedImage = firstColorGallery[0];
+              }
+            }
+            
+            setGalleryImages(initialGallery);
+            setSelectedImage(initialSelectedImage);
           }
         } catch (error) {
           console.error('Error fetching product:', error);
-          // Fallback avec filtre des tailles disponibles
+          // Fallback avec les données mock
           const foundProduct = mockProducts.find(p => p.id === productId);
           if (foundProduct) {
             setProduct(foundProduct);
@@ -106,9 +168,31 @@ export default function ProductPage() {
               setSelectedColor(foundProduct.colors[0]);
             }
             
-            // Définir l'image principale
-            const fallbackImage = foundProduct.image || getPlaceholderImage(800, 1000, 'Product+Image');
-            setSelectedImage(fallbackImage);
+            // Initialiser la galerie avec fallback
+            let fallbackGallery: string[] = [];
+            let fallbackSelectedImage = '';
+            
+            if (foundProduct.gallery && foundProduct.gallery.length > 0) {
+              setDefaultGallery(foundProduct.gallery);
+              fallbackGallery = foundProduct.gallery;
+              fallbackSelectedImage = foundProduct.gallery[0];
+            } else {
+              const mainImage = foundProduct.image || getPlaceholderImage(800, 1000, 'Product+Image');
+              fallbackGallery = [mainImage];
+              fallbackSelectedImage = mainImage;
+            }
+            
+            // Si le produit a des couleurs, utiliser la galerie de la première couleur
+            if (foundProduct.colors && foundProduct.colors[0]) {
+              const firstColorGallery = getColorGallery(foundProduct.colors[0]);
+              if (firstColorGallery.length > 0) {
+                fallbackGallery = firstColorGallery;
+                fallbackSelectedImage = firstColorGallery[0];
+              }
+            }
+            
+            setGalleryImages(fallbackGallery);
+            setSelectedImage(fallbackSelectedImage);
           }
         }
       }
@@ -118,6 +202,23 @@ export default function ProductPage() {
 
     fetchProductData();
   }, [params.id]);
+
+  // Effet pour mettre à jour la galerie lorsqu'une couleur est sélectionnée
+  useEffect(() => {
+    if (selectedColor && product) {
+      const colorGallery = getColorGallery(selectedColor);
+      
+      if (colorGallery.length > 0) {
+        // Utiliser les images spécifiques à la couleur sélectionnée
+        setGalleryImages(colorGallery);
+        setSelectedImage(colorGallery[0]);
+      } else if (defaultGallery.length > 0) {
+        // Si la couleur n'a pas de galerie spécifique, utiliser la galerie par défaut
+        setGalleryImages(defaultGallery);
+        setSelectedImage(defaultGallery[0]);
+      }
+    }
+  }, [selectedColor, product, defaultGallery]);
 
   const handleAddToCart = () => {
     if (product && selectedSize && selectedColor) {
@@ -129,7 +230,7 @@ export default function ProductPage() {
           name: product.name,
           price: product.price,
           description: product.description,
-          image: product.image,
+          image: selectedImage, // Utiliser l'image actuellement sélectionnée
           category: product.category,
           size: selectedSize,
           quantity: quantity,
@@ -175,11 +276,17 @@ export default function ProductPage() {
     setIsFullscreen(!isFullscreen);
   };
 
+  // Fonction pour obtenir un badge indiquant le nombre d'images par couleur
+  const getColorImageCount = (color: ProductColor): number => {
+    const colorGallery = getColorGallery(color);
+    return colorGallery.length;
+  };
+
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-12">
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(52_58_64)]"></div>
         </div>
       </div>
     );
@@ -199,21 +306,15 @@ export default function ProductPage() {
     ? sizeGuideImages[collectionName] 
     : defaultSizeGuideImage;
 
-  // Préparer les images pour la galerie
-  const productMainImage = product.image || getPlaceholderImage(800, 1000, 'Product+Image');
-  const galleryImages = product.gallery && product.gallery.length > 0 
-    ? product.gallery.slice(0, 4) // Prendre seulement les 4 premières images
-    : [];
-
   return (
     <>
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <nav className="mb-8">
           <div className="flex items-center space-x-2 text-sm text-gray-500">
-            <Link href="/" className="hover:text-amber-600">Home</Link>
+            <Link href="/" className="hover:text-[rgb(52_58_64)]">Home</Link>
             <span>›</span>
-            <Link href="/products" className="hover:text-amber-600">Products</Link>
+            <Link href="/products" className="hover:text-[rgb(52_58_64)]">Products</Link>
             <span>›</span>
             <span className="text-gray-900">{product.name}</span>
           </div>
@@ -226,7 +327,7 @@ export default function ProductPage() {
             <div className="relative rounded-2xl overflow-hidden border border-gray-200 bg-white group">
               <img 
                 src={selectedImage} 
-                alt={`${product.name} - Main image`}
+                alt={`${product.name}${selectedColor ? ` - ${selectedColor.color_name}` : ''}`}
                 className="w-full h-[500px] lg:h-[600px] object-contain"
                 onError={(e) => {
                   e.currentTarget.src = getPlaceholderImage(800, 1000, 'Image+Failed');
@@ -234,10 +335,28 @@ export default function ProductPage() {
                 }}
               />
               
+              {/* Badge indiquant la couleur actuelle */}
+              {selectedColor && (
+                <div className="absolute top-4 left-4 flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-gray-200 shadow-sm">
+                  <div 
+                    className="w-3 h-3 rounded-full border border-gray-300"
+                    style={{ backgroundColor: selectedColor.color_hex || '#CCCCCC' }}
+                  />
+                  <span className="text-sm font-medium text-gray-700 capitalize">
+                    {selectedColor.color_name}
+                  </span>
+                </div>
+              )}
+              
+              {/* Badge indiquant le nombre d'images */}
+              <div className="absolute top-4 right-16 bg-black/60 text-white px-2.5 py-1 rounded-full text-xs font-medium backdrop-blur-sm">
+                {galleryImages.findIndex(img => img === selectedImage) + 1} / {galleryImages.length}
+              </div>
+              
               {/* Bouton plein écran */}
               <button
                 onClick={toggleFullscreen}
-                className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white p-2 rounded-full transition-all duration-200"
+                className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm"
               >
                 <Maximize2 className="h-5 w-5" />
               </button>
@@ -246,21 +365,21 @@ export default function ProductPage() {
             {/* Grille 2x2 pour les images de la galerie */}
             {galleryImages.length > 0 && (
               <div className="grid grid-cols-2 gap-3 h-[300px] lg:h-[350px]">
-                {galleryImages.map((image: string, index: number) => (
+                {galleryImages.slice(0, 4).map((image: string, index: number) => (
                   <button
                     key={index}
                     onClick={() => selectImage(image)}
                     className={`
                       relative rounded-lg overflow-hidden border-2 transition-all duration-200
                       ${image === selectedImage 
-                        ? 'border-amber-500 scale-[1.02] shadow-lg' 
-                        : 'border-gray-200 hover:border-amber-300'
+                        ? 'border-[rgb(52_58_64)] scale-[1.02] shadow-lg' 
+                        : 'border-gray-200 hover:border-[rgb(52_58_64_/_50%)]'
                       }
                     `}
                   >
                     <img 
                       src={image} 
-                      alt={`${product.name} - Gallery image ${index + 1}`}
+                      alt={`${product.name}${selectedColor ? ` - ${selectedColor.color_name}` : ''} - Image ${index + 1}`}
                       className="w-full h-full object-cover"
                       onError={(e) => {
                         e.currentTarget.src = getPlaceholderImage(400, 300, `Gallery+${index + 1}`);
@@ -273,11 +392,16 @@ export default function ProductPage() {
                     {/* Indicateur si c'est l'image sélectionnée */}
                     {image === selectedImage && (
                       <div className="absolute top-2 right-2">
-                        <div className="w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center">
+                        <div className="w-6 h-6 bg-[rgb(52_58_64)] rounded-full flex items-center justify-center">
                           <div className="w-2 h-2 bg-white rounded-full" />
                         </div>
                       </div>
                     )}
+                    
+                    {/* Numéro de l'image */}
+                    <div className="absolute bottom-2 left-2 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded backdrop-blur-sm">
+                      {index + 1}
+                    </div>
                   </button>
                 ))}
               </div>
@@ -305,6 +429,16 @@ export default function ProductPage() {
                   {product.collection_name}
                 </span>
               )}
+              
+              {/* Badge indiquant le nombre d'images pour la couleur actuelle */}
+              {selectedColor && (
+                <span className="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm font-medium border border-amber-200 flex items-center gap-1">
+                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  {getColorImageCount(selectedColor)} images
+                </span>
+              )}
             </div>
           </div>
 
@@ -312,7 +446,7 @@ export default function ProductPage() {
           <div className="space-y-6">
             <div>
               <h1 className="text-3xl lg:text-4xl font-bold mb-2 text-gray-900">{product.name}</h1>
-              <p className="text-2xl font-semibold text-amber-600 mb-4">AED{product.price}</p>
+              <p className="text-2xl font-semibold text-[rgb(52_58_64)] mb-4">AED{product.price}</p>
               
               <p className="text-gray-600 leading-relaxed text-base lg:text-lg">{product.description}</p>
             </div>
@@ -320,12 +454,21 @@ export default function ProductPage() {
             {/* Sélection de la couleur */}
             {hasColors && (
               <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Palette className="h-5 w-5 text-gray-600" />
-                  <label className="font-semibold text-gray-900 text-lg">Couleur:</label>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Palette className="h-5 w-5 text-gray-600" />
+                    <label className="font-semibold text-gray-900 text-lg">Couleur:</label>
+                    {selectedColor && (
+                      <span className="text-sm text-gray-500 capitalize">
+                        {selectedColor.color_name}
+                      </span>
+                    )}
+                  </div>
+                  
+                  {/* Indicateur d'images disponibles pour la couleur sélectionnée */}
                   {selectedColor && (
-                    <span className="text-sm text-gray-500 capitalize">
-                      {selectedColor.color_name}
+                    <span className="text-xs text-gray-400">
+                      {getColorImageCount(selectedColor)} image(s) disponible(s)
                     </span>
                   )}
                 </div>
@@ -334,26 +477,34 @@ export default function ProductPage() {
                   {product.colors?.map((color: ProductColor) => {
                     const isSelected = selectedColor?.id === color.id;
                     const isLight = color.color_hex && parseInt(color.color_hex.replace('#', ''), 16) > 0xFFFFFF / 2;
+                    const imageCount = getColorImageCount(color);
                     
                     return (
                       <button
                         key={color.id}
                         onClick={() => setSelectedColor(color)}
                         className={`
-                          w-12 h-12 rounded-full border-4 transition-all duration-200 transform hover:scale-110
+                          relative w-12 h-12 rounded-full border-4 transition-all duration-200 transform hover:scale-110
                           ${isSelected 
-                            ? 'border-amber-500 shadow-lg scale-110' 
-                            : 'border-gray-200 hover:border-amber-300'
+                            ? 'border-[rgb(52_58_64)] shadow-lg scale-110' 
+                            : 'border-gray-200 hover:border-[rgb(52_58_64_/_50%)]'
                           }
                         `}
                         style={{ 
                           backgroundColor: color.color_hex || '#CCCCCC',
                         }}
-                        title={color.color_name}
+                        title={`${color.color_name} (${imageCount} images)`}
                       >
                         {isSelected && (
                           <div className="w-full h-full flex items-center justify-center">
                             <div className={`w-2 h-2 rounded-full ${isLight ? 'bg-gray-800' : 'bg-white'} shadow-sm`} />
+                          </div>
+                        )}
+                        
+                        {/* Badge indiquant le nombre d'images pour cette couleur */}
+                        {imageCount > 0 && (
+                          <div className="absolute -top-1 -right-1 w-5 h-5 bg-[rgb(52_58_64)] rounded-full flex items-center justify-center">
+                            <span className="text-[10px] text-white font-bold">{imageCount}</span>
                           </div>
                         )}
                       </button>
@@ -388,7 +539,7 @@ export default function ProductPage() {
                 <button
                   type="button"
                   onClick={openSizeGuide}
-                  className="font-semibold text-gray-900 text-lg hover:text-amber-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-amber-300 rounded flex items-center gap-1"
+                  className="font-semibold text-gray-900 text-lg hover:text-[rgb(52_58_64)] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[rgb(52_58_64_/_30%)] rounded flex items-center gap-1"
                 >
                   Select size:
                   <ExternalLink className="h-4 w-4" />
@@ -409,9 +560,9 @@ export default function ProductPage() {
                         p-4 rounded-lg border-2 text-center transition-all duration-200 font-medium
                         transform hover:scale-105
                         ${isSelected 
-                          ? 'border-amber-500 bg-amber-50 text-amber-700 shadow-md' 
+                          ? 'border-[rgb(52_58_64)] bg-[rgb(52_58_64_/_10%)] text-[rgb(52_58_64)] shadow-md' 
                           : isAvailable
-                            ? 'border-gray-200 bg-white text-gray-700 hover:border-amber-300 hover:bg-amber-50'
+                            ? 'border-gray-200 bg-white text-gray-700 hover:border-[rgb(52_58_64_/_50%)] hover:bg-[rgb(52_58_64_/_5%)]'
                             : 'border-gray-100 bg-gray-50 text-gray-400 cursor-not-allowed'
                         }
                       `}
@@ -427,7 +578,7 @@ export default function ProductPage() {
               </div>
               
               {!selectedSize && availableSizes.length > 0 && (
-                <p className="text-sm text-amber-600">Select a size</p>
+                <p className="text-sm text-[rgb(52_58_64)]">Select a size</p>
               )}
             </div>
 
@@ -495,7 +646,7 @@ export default function ProductPage() {
             <div className="space-y-4 pt-4">
               <Button 
                 size="lg" 
-                className="w-full bg-amber-600 hover:bg-amber-700 text-white py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
+                className="w-full bg-[rgb(52_58_64)] hover:bg-[rgb(40_46_52)] text-white py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
                 onClick={handleAddToCart}
                 disabled={!canAddToCart}
               >
@@ -511,7 +662,7 @@ export default function ProductPage() {
               
               <Button 
                 variant="outline" 
-                className="w-full py-4 text-lg border-amber-200 text-amber-700 hover:bg-amber-50 hover:border-amber-300"
+                className="w-full py-4 text-lg border-[rgb(52_58_64_/_30%)] text-[rgb(52_58_64)] hover:bg-[rgb(52_58_64_/_10%)] hover:border-[rgb(52_58_64)]"
               >
                 <Link href="/products">
                   ← Back to products page
@@ -532,7 +683,7 @@ export default function ProductPage() {
                   >
                     <span className="font-semibold text-gray-900 text-lg">Description</span>
                     {activeTab === 'description' ? (
-                      <ChevronUp className="h-5 w-5 text-amber-600" />
+                      <ChevronUp className="h-5 w-5 text-[rgb(52_58_64)]" />
                     ) : (
                       <ChevronDown className="h-5 w-5 text-gray-400" />
                     )}
@@ -545,19 +696,19 @@ export default function ProductPage() {
                       </p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="flex items-center space-x-3">
-                          <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-[rgb(52_58_64)] rounded-full"></div>
                           <span className="text-gray-700">Selected premium materials</span>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-[rgb(52_58_64)] rounded-full"></div>
                           <span className="text-gray-700">Handmade craftsmanship</span>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-[rgb(52_58_64)] rounded-full"></div>
                           <span className="text-gray-700">Lifetime warranty</span>
                         </div>
                         <div className="flex items-center space-x-3">
-                          <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-[rgb(52_58_64)] rounded-full"></div>
                           <span className="text-gray-700">Luxury gift packaging</span>
                         </div>
                       </div>
@@ -573,7 +724,7 @@ export default function ProductPage() {
                   >
                     <span className="font-semibold text-gray-900 text-lg">Fabric & Care</span>
                     {activeTab === 'fabric' ? (
-                      <ChevronUp className="h-5 w-5 text-amber-600" />
+                      <ChevronUp className="h-5 w-5 text-[rgb(52_58_64)]" />
                     ) : (
                       <ChevronDown className="h-5 w-5 text-gray-400" />
                     )}
@@ -586,19 +737,19 @@ export default function ProductPage() {
                           <h4 className="font-semibold text-gray-900 mb-3">Material Composition</h4>
                           <ul className="text-gray-600 space-y-2">
                             <li className="flex items-start space-x-3">
-                              <span className="text-amber-600 mt-0.5">•</span>
+                              <span className="text-[rgb(52_58_64)] mt-0.5">•</span>
                               <span>100% Premium Organic Cotton</span>
                             </li>
                             <li className="flex items-start space-x-3">
-                              <span className="text-amber-600 mt-0.5">•</span>
+                              <span className="text-[rgb(52_58_64)] mt-0.5">•</span>
                               <span>Reinforced stitching for durability</span>
                             </li>
                             <li className="flex items-start space-x-3">
-                              <span className="text-amber-600 mt-0.5">•</span>
+                              <span className="text-[rgb(52_58_64)] mt-0.5">•</span>
                               <span>Eco-friendly dyes and prints</span>
                             </li>
                             <li className="flex items-start space-x-3">
-                              <span className="text-amber-600 mt-0.5">•</span>
+                              <span className="text-[rgb(52_58_64)] mt-0.5">•</span>
                               <span>Hypoallergenic and skin-friendly</span>
                             </li>
                           </ul>
@@ -642,7 +793,7 @@ export default function ProductPage() {
                   >
                     <span className="font-semibold text-gray-900 text-lg">Shipping & Returns</span>
                     {activeTab === 'shipping' ? (
-                      <ChevronUp className="h-5 w-5 text-amber-600" />
+                      <ChevronUp className="h-5 w-5 text-[rgb(52_58_64)]" />
                     ) : (
                       <ChevronDown className="h-5 w-5 text-gray-400" />
                     )}
@@ -728,16 +879,16 @@ export default function ProductPage() {
             .map((featuredProduct) => (
               <div key={featuredProduct.id} className="border rounded-lg p-4 hover:shadow-lg transition-shadow group bg-white">
                 {/* Image placeholder */}
-                <div className="w-full h-48 bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg mb-3 flex items-center justify-center group-hover:scale-105 transition-transform">
-                  <div className="text-center text-amber-800">
-                    <div className="w-12 h-12 bg-amber-200 rounded-full flex items-center justify-center mx-auto mb-2">
+                <div className="w-full h-48 bg-gradient-to-br from-[rgb(52_58_64_/_5%)] to-[rgb(52_58_64_/_10%)] rounded-lg mb-3 flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <div className="text-center text-[rgb(52_58_64)]">
+                    <div className="w-12 h-12 bg-[rgb(52_58_64_/_20%)] rounded-full flex items-center justify-center mx-auto mb-2">
                       <span className="text-sm font-bold">F</span>
                     </div>
                     <p className="text-sm font-medium">{featuredProduct.name}</p>
                   </div>
                 </div>
                 
-                <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-amber-600 transition-colors line-clamp-1">
+                <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-[rgb(52_58_64)] transition-colors line-clamp-1">
                   {featuredProduct.name}
                 </h3>
                 
@@ -802,7 +953,7 @@ export default function ProductPage() {
         onClose={() => setShowToast(false)}
         productName={product.name}
         productPrice={product.price}
-        productImage={product.image}
+        productImage={selectedImage} // Utiliser l'image actuellement sélectionnée
         productSize={selectedSize}
         productColor={selectedColor?.color_name}
         productColorHex={selectedColor?.color_hex}
@@ -857,30 +1008,30 @@ export default function ProductPage() {
               </div>
 
               {/* Instructions */}
-              <div className="mt-8 p-6 bg-amber-50 rounded-lg border border-amber-200">
+              <div className="mt-8 p-6 bg-[rgb(52_58_64_/_10%)] rounded-lg border border-[rgb(52_58_64_/_30%)]">
                 <h3 className="font-semibold text-gray-900 mb-3">How to measure:</h3>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-sm font-medium text-amber-700">1</span>
+                    <div className="w-6 h-6 bg-[rgb(52_58_64_/_20%)] rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm font-medium text-[rgb(52_58_64)]">1</span>
                     </div>
                     <span>Use a soft measuring tape for accurate measurements</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-sm font-medium text-amber-700">2</span>
+                    <div className="w-6 h-6 bg-[rgb(52_58_64_/_20%)] rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm font-medium text-[rgb(52_58_64)]">2</span>
                     </div>
                     <span>Measure chest at the fullest part, under the arms</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-sm font-medium text-amber-700">3</span>
+                    <div className="w-6 h-6 bg-[rgb(52_58_64_/_20%)] rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm font-medium text-[rgb(52_58_64)]">3</span>
                     </div>
                     <span>Measure waist at the natural waistline</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-sm font-medium text-amber-700">4</span>
+                    <div className="w-6 h-6 bg-[rgb(52_58_64_/_20%)] rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm font-medium text-[rgb(52_58_64)]">4</span>
                     </div>
                     <span>For height, measure without shoes</span>
                   </li>
@@ -911,13 +1062,72 @@ export default function ProductPage() {
             <X className="h-8 w-8" />
           </button>
           
+          {/* Indicateur de couleur en plein écran */}
+          {selectedColor && (
+            <div className="absolute top-4 left-4 flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/30">
+              <div 
+                className="w-3 h-3 rounded-full border border-white/50"
+                style={{ backgroundColor: selectedColor.color_hex || '#CCCCCC' }}
+              />
+              <span className="text-sm font-medium text-white capitalize">
+                {selectedColor.color_name}
+              </span>
+            </div>
+          )}
+          
           <div className="w-full h-full flex items-center justify-center p-4">
             <img 
               src={selectedImage} 
-              alt={`${product.name} - Fullscreen`}
+              alt={`${product.name}${selectedColor ? ` - ${selectedColor.color_name}` : ''} - Fullscreen`}
               className="max-w-full max-h-full object-contain"
             />
           </div>
+          
+          {/* Navigation entre images */}
+          {galleryImages.length > 1 && (
+            <>
+              <button
+                onClick={() => {
+                  const currentIndex = galleryImages.findIndex(img => img === selectedImage);
+                  const prevIndex = currentIndex > 0 ? currentIndex - 1 : galleryImages.length - 1;
+                  setSelectedImage(galleryImages[prevIndex]);
+                }}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              
+              <button
+                onClick={() => {
+                  const currentIndex = galleryImages.findIndex(img => img === selectedImage);
+                  const nextIndex = currentIndex < galleryImages.length - 1 ? currentIndex + 1 : 0;
+                  setSelectedImage(galleryImages[nextIndex]);
+                }}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full backdrop-blur-sm transition-all"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+              
+              {/* Indicateur de position */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                {galleryImages.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(img)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      img === selectedImage 
+                        ? 'bg-white scale-125' 
+                        : 'bg-white/50 hover:bg-white/70'
+                    }`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </div>
       )}
     </>

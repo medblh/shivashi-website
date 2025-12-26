@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { ShoppingCart, Search, Menu, X, Home, Gem, User, Phone, LogIn, User as UserIcon, LogOut } from 'lucide-react';
+import { ShoppingCart, Search, Menu, X, Home, Gem, User, Phone, LogIn, User as UserIcon, LogOut, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
@@ -20,6 +20,7 @@ export default function Header() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [activeSubMenu, setActiveSubMenu] = useState<'boys' | 'girls' | null>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
   const isHomePage = pathname === '/';
@@ -55,7 +56,7 @@ export default function Header() {
 
   // Empêcher le scroll quand le menu mobile est ouvert
   useEffect(() => {
-    if (mobileMenuOpen) {
+    if (mobileMenuOpen || activeSubMenu) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -64,7 +65,7 @@ export default function Header() {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [mobileMenuOpen]);
+  }, [mobileMenuOpen, activeSubMenu]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,6 +79,7 @@ export default function Header() {
     setMobileMenuOpen(false);
     setShowSearch(false);
     setUserMenuOpen(false);
+    setActiveSubMenu(null);
   };
 
   const handleMobileLinkClick = () => {
@@ -88,6 +90,14 @@ export default function Header() {
     logout();
     setUserMenuOpen(false);
     closeAllMenus();
+  };
+
+  const openSubMenu = (type: 'boys' | 'girls') => {
+    setActiveSubMenu(type);
+  };
+
+  const closeSubMenu = () => {
+    setActiveSubMenu(null);
   };
 
   // Déterminer la classe du header en fonction de la page et du scroll
@@ -590,154 +600,440 @@ export default function Header() {
         </div>
       )}
 
-      {/* Menu Mobile/Desktop Unifié (commun à toutes les pages) */}
-      {mobileMenuOpen && (
+      {/* Menu Mobile et Sous-menus */}
+      {(mobileMenuOpen || activeSubMenu) && (
         <>
           {/* Overlay sombre */}
           <div 
-            className="fixed inset-0 bg-black/50 z-40 top-0 left-0"
+            className="fixed inset-0 bg-black/50 z-40"
             onClick={closeAllMenus}
           />
           
-          {/* Menu */}
-          <div className="fixed top-0 left-0 right-0 bg-white shadow-2xl z-50 animate-in slide-in-from-top-5 duration-200 h-screen overflow-y-auto md:w-80">
-            {/* En-tête du menu */}
-            <div className="flex justify-between items-center p-4 border-b">
-              <div className="text-lg font-semibold">Menu</div>
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={closeAllMenus}
+          {/* Conteneur principal pour les menus */}
+          <div className="fixed top-0 left-0 h-full flex z-50">
+            {/* Menu Principal - toujours visible quand mobileMenuOpen est true */}
+            {mobileMenuOpen && (
+              <div 
+                className={`
+                  h-full bg-white shadow-2xl overflow-y-auto
+                  transform transition-all duration-300 ease-in-out
+                  ${activeSubMenu ? 'translate-x-0 w-64' : 'translate-x-0 w-80'}
+                `}
               >
-                <X className="h-5 w-5" />
-              </Button>
-            </div>
-
-            {/* Section Utilisateur */}
-            {user ? (
-              <div className="p-4 bg-green-50 border-b">
-                <p className="font-medium text-gray-900">Welcome, {user.name}</p>
-                <p className="text-sm text-gray-600">{user.email}</p>
-                <div className="flex space-x-2 mt-2">
-                  <Button asChild size="sm" variant="outline" className="flex-1">
-                    <Link href="/profile" onClick={handleMobileLinkClick}>
-                      Profil
-                    </Link>
-                  </Button>
-                  <Button size="sm" variant="outline" className="flex-1" onClick={handleLogout}>
-                    LogOut
+                {/* En-tête du menu */}
+                <div className="flex justify-between items-center p-4 border-b">
+                  <div className="text-lg font-semibold">Menu</div>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={closeAllMenus}
+                  >
+                    <X className="h-5 w-5" />
                   </Button>
                 </div>
-              </div>
-            ) : (
-              <div className="p-4 border-b">
-                <Button asChild className="w-full" onClick={handleMobileLinkClick}>
-                  <Link href="/auth/login">
-                    <LogIn className="h-4 w-4 mr-2" />
-                    Login
-                  </Link>
-                </Button>
-              </div>
-            )}
 
-            {/* Navigation */}
-            <nav className="flex flex-col p-4 space-y-1">
-              <Link 
-                href="/collections" 
-                className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100"
-                onClick={handleMobileLinkClick}
-              >
-                <Gem className="h-5 w-5" />
-                <span>Collection 2026</span>
-              </Link>
-              
-              <Link 
-                href="/products" 
-                className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100"
-                onClick={handleMobileLinkClick}
-              >
-                <Gem className="h-5 w-5" />
-                <span>New Arrivals</span>
-              </Link>
-              
-              <Link 
-                href="/products" 
-                className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100"
-                onClick={handleMobileLinkClick}
-              >
-                <Gem className="h-5 w-5" />
-                <span>Best Sellers</span>
-              </Link>
-              
-              <Link 
-                href="/products" 
-                className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100"
-                onClick={handleMobileLinkClick}
-              >
-                <Gem className="h-5 w-5" />
-                <span>Boys</span>
-              </Link>
+                {/* Section Utilisateur */}
+                {user ? (
+                  <div className="p-4 bg-green-50 border-b">
+                    <p className="font-medium text-gray-900">Welcome, {user.name}</p>
+                    <p className="text-sm text-gray-600">{user.email}</p>
+                    <div className="flex space-x-2 mt-2">
+                      <Button asChild size="sm" variant="outline" className="flex-1">
+                        <Link href="/profile" onClick={handleMobileLinkClick}>
+                          Profil
+                        </Link>
+                      </Button>
+                      <Button size="sm" variant="outline" className="flex-1" onClick={handleLogout}>
+                        LogOut
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-4 border-b">
+                    <Button asChild className="w-full" onClick={handleMobileLinkClick}>
+                      <Link href="/auth/login">
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Login
+                      </Link>
+                    </Button>
+                  </div>
+                )}
 
-              <Link 
-                href="/products" 
-                className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100"
-                onClick={handleMobileLinkClick}
-              >
-                <Gem className="h-5 w-5" />
-                <span>Girls</span>
-              </Link>
-
-              <Link 
-                href="/about" 
-                className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100"
-                onClick={handleMobileLinkClick}
-              >
-                <User className="h-5 w-5" />
-                <span>About us</span>
-              </Link>
-              
-              <Link 
-                href="/contact" 
-                className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all"
-                onClick={handleMobileLinkClick}
-              >
-                <Phone className="h-5 w-5" />
-                <span>Contact us</span>
-              </Link>
-
-              {/* Liens utilisateur connecté */}
-              {user && (
-                <>
+                {/* Navigation */}
+                <nav className="flex flex-col p-4 space-y-1">
                   <Link 
-                    href="/orders" 
+                    href="/collections" 
                     className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100"
                     onClick={handleMobileLinkClick}
                   >
-                    <ShoppingCart className="h-5 w-5" />
-                    <span>Orders</span>
+                    <Gem className="h-5 w-5" />
+                    <span>Collection 2026</span>
                   </Link>
-                </>
-              )}
-            </nav>
+                  
+                  <Link 
+                    href="/products?category=new-arrivals" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <Gem className="h-5 w-5" />
+                    <span>New Arrivals</span>
+                  </Link>
+                  
+                  <Link 
+                    href="/products?sort=best-selling" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <Gem className="h-5 w-5" />
+                    <span>Best Sellers</span>
+                  </Link>
+                  
+                  {/* Bouton Boys */}
+                  <button 
+                    onClick={() => openSubMenu('boys')}
+                    className={`flex items-center justify-between text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100 w-full text-left group ${
+                      activeSubMenu === 'boys' ? 'bg-blue-50 text-blue-600' : ''
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Gem className="h-5 w-5" />
+                      <span>Boys</span>
+                    </div>
+                    <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </button>
 
-            {/* Informations de contact */}
-            <div className="p-4 mt-8 bg-gray-50 rounded-lg mx-4">
-              <h3 className="font-semibold mb-3 text-gray-900">Contact</h3>
-              <div className="text-sm text-gray-600 space-y-2">
-                <p className="flex items-center space-x-2">
-                  <span>📞</span>
-                  <span>+971 523 45 6789</span>
-                </p>
-                <p className="flex items-center space-x-2">
-                  <span>✉️</span>
-                  <span>contact@shivashi.com</span>
-                </p>
-                <p className="flex items-center space-x-2">
-                  <span>🕒</span>
-                  <span>Mon-Sat: 9h-18h</span>
-                </p>
+                  {/* Bouton Girls */}
+                  <button 
+                    onClick={() => openSubMenu('girls')}
+                    className={`flex items-center justify-between text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100 w-full text-left group ${
+                      activeSubMenu === 'girls' ? 'bg-pink-50 text-pink-600' : ''
+                    }`}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <Gem className="h-5 w-5" />
+                      <span>Girls</span>
+                    </div>
+                    <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </button>
+
+                  <Link 
+                    href="/about" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <User className="h-5 w-5" />
+                    <span>About us</span>
+                  </Link>
+                  
+                  <Link 
+                    href="/contact" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <Phone className="h-5 w-5" />
+                    <span>Contact us</span>
+                  </Link>
+
+                  {/* Liens utilisateur connecté */}
+                  {user && (
+                    <>
+                      <Link 
+                        href="/orders" 
+                        className="flex items-center space-x-3 text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100"
+                        onClick={handleMobileLinkClick}
+                      >
+                        <ShoppingCart className="h-5 w-5" />
+                        <span>Orders</span>
+                      </Link>
+                    </>
+                  )}
+                </nav>
+
+                {/* Informations de contact */}
+                <div className="p-4 mt-8 bg-gray-50 rounded-lg mx-4">
+                  <h3 className="font-semibold mb-3 text-gray-900">Contact</h3>
+                  <div className="text-sm text-gray-600 space-y-2">
+                    <p className="flex items-center space-x-2">
+                      <span>📞</span>
+                      <span>+971 523 45 6789</span>
+                    </p>
+                    <p className="flex items-center space-x-2">
+                      <span>✉️</span>
+                      <span>contact@shivashi.com</span>
+                    </p>
+                    <p className="flex items-center space-x-2">
+                      <span>🕒</span>
+                      <span>Mon-Sat: 9h-18h</span>
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* Sidebar Boys */}
+            {activeSubMenu === 'boys' && (
+              <div 
+                className={`
+                  h-full bg-white shadow-2xl overflow-y-auto
+                  transform transition-all duration-300 ease-in-out
+                  translate-x-0
+                  w-80
+                  border-l
+                `}
+              >
+                {/* En-tête du menu Boys */}
+                <div className="flex items-center p-4 border-b bg-gradient-to-r from-blue-50 to-white">
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={closeSubMenu}
+                    className="mr-2 hover:bg-blue-100"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </Button>
+                  <div className="text-lg font-semibold text-gray-900">Boys Collection</div>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={closeAllMenus}
+                    className="ml-auto"
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
+
+                {/* Navigation Boys */}
+                <nav className="flex flex-col p-4 space-y-1">
+                  <h3 className="font-semibold text-gray-800 mb-3 px-4">Categories</h3>
+                  
+                  <Link 
+                    href="/products?category=boys&subcategory=tshirts-tops" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-medium py-4 px-4 rounded-lg hover:bg-blue-50 transition-all border-b border-gray-100 group"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                      <span className="text-blue-600 text-sm font-bold">T</span>
+                    </div>
+                    <div className="flex-1">
+                      <span>T-Shirts & Tops</span>
+                      <p className="text-xs text-gray-500 mt-1">Casual & formal tops for boys</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600" />
+                  </Link>
+                  
+                  <Link 
+                    href="/products?category=boys&subcategory=bottoms" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-medium py-4 px-4 rounded-lg hover:bg-blue-50 transition-all border-b border-gray-100 group"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                      <span className="text-green-600 text-sm font-bold">B</span>
+                    </div>
+                    <div className="flex-1">
+                      <span>Shorts</span>
+                      <p className="text-xs text-gray-500 mt-1">Pants, shorts & jeans</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600" />
+                  </Link>
+                  
+                  <Link 
+                    href="/products?category=boys&subcategory=jackets" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-medium py-4 px-4 rounded-lg hover:bg-blue-50 transition-all border-b border-gray-100 group"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                      <span className="text-purple-600 text-sm font-bold">J</span>
+                    </div>
+                    <div className="flex-1">
+                      <span>Hoodies</span>
+                      <p className="text-xs text-gray-500 mt-1">Hoodies, jackets & coats</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600" />
+                  </Link>
+                  
+                  <Link 
+                    href="/products?category=boys&subcategory=sets" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-medium py-4 px-4 rounded-lg hover:bg-blue-50 transition-all border-b border-gray-100 group"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center group-hover:bg-yellow-200 transition-colors">
+                      <span className="text-yellow-600 text-sm font-bold">S</span>
+                    </div>
+                    <div className="flex-1">
+                      <span>Sweatshirts</span>
+                      <p className="text-xs text-gray-500 mt-1">Complete matching sets</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600" />
+                  </Link>
+                  
+                  <Link 
+                    href="/products?category=boys&subcategory=accessories" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-blue-600 font-medium py-4 px-4 rounded-lg hover:bg-blue-50 transition-all group"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center group-hover:bg-red-200 transition-colors">
+                      <span className="text-red-600 text-sm font-bold">A</span>
+                    </div>
+                    <div className="flex-1">
+                      <span>Pants</span>
+                      <p className="text-xs text-gray-500 mt-1">Hats, socks & more</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-blue-600" />
+                  </Link>
+
+                  {/* View All Boys */}
+                  <div className="mt-6 pt-4 border-t">
+                    <Link 
+                      href="/products?category=boys"
+                      className="block text-center bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                      onClick={handleMobileLinkClick}
+                    >
+                      View All Boys Collection
+                    </Link>
+                  </div>
+                </nav>
+              </div>
+            )}
+
+            {/* Sidebar Girls */}
+            {activeSubMenu === 'girls' && (
+              <div 
+                className={`
+                  h-full bg-white shadow-2xl overflow-y-auto
+                  transform transition-all duration-300 ease-in-out
+                  translate-x-0
+                  w-80
+                  border-l
+                `}
+              >
+                {/* En-tête du menu Girls */}
+                <div className="flex items-center p-4 border-b bg-gradient-to-r from-pink-50 to-white">
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={closeSubMenu}
+                    className="mr-2 hover:bg-pink-100"
+                  >
+                    <ChevronLeft className="h-5 w-5" />
+                  </Button>
+                  <div className="text-lg font-semibold text-gray-900">Girls Collection</div>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={closeAllMenus}
+                    className="ml-auto"
+                  >
+                    <X className="h-5 w-5" />
+                  </Button>
+                </div>
+
+                {/* Navigation Girls */}
+                <nav className="flex flex-col p-4 space-y-1">
+                  <h3 className="font-semibold text-gray-800 mb-3 px-4">Categories</h3>
+                  
+                  <Link 
+                    href="/products?category=girls&subcategory=dresses" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-pink-600 font-medium py-4 px-4 rounded-lg hover:bg-pink-50 transition-all border-b border-gray-100 group"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center group-hover:bg-pink-200 transition-colors">
+                      <span className="text-pink-600 text-sm font-bold">D</span>
+                    </div>
+                    <div className="flex-1">
+                      <span>Tshirts & Tops</span>
+                      <p className="text-xs text-gray-500 mt-1">Party & casual dresses</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-pink-600" />
+                  </Link>
+                  
+                  <Link 
+                    href="/products?category=girls&subcategory=tshirts-tops" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-pink-600 font-medium py-4 px-4 rounded-lg hover:bg-pink-50 transition-all border-b border-gray-100 group"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                      <span className="text-purple-600 text-sm font-bold">T</span>
+                    </div>
+                    <div className="flex-1">
+                      <span>Shorts & Bikeshorts</span>
+                      <p className="text-xs text-gray-500 mt-1">Colorful tops for girls</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-pink-600" />
+                  </Link>
+                  
+                  <Link 
+                    href="/products?category=girls&subcategory=bottoms" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-pink-600 font-medium py-4 px-4 rounded-lg hover:bg-pink-50 transition-all border-b border-gray-100 group"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                      <span className="text-blue-600 text-sm font-bold">B</span>
+                    </div>
+                    <div className="flex-1">
+                      <span>Hoodies</span>
+                      <p className="text-xs text-gray-500 mt-1">Leggings, skirts & shorts</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-pink-600" />
+                  </Link>
+                  
+                  <Link 
+                    href="/products?category=girls&subcategory=sets" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-pink-600 font-medium py-4 px-4 rounded-lg hover:bg-pink-50 transition-all border-b border-gray-100 group"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center group-hover:bg-yellow-200 transition-colors">
+                      <span className="text-yellow-600 text-sm font-bold">S</span>
+                    </div>
+                    <div className="flex-1">
+                      <span>Sweatshirts</span>
+                      <p className="text-xs text-gray-500 mt-1">Coordinated sets</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-pink-600" />
+                  </Link>
+                  
+                  <Link 
+                    href="/products?category=girls&subcategory=accessories" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-pink-600 font-medium py-4 px-4 rounded-lg hover:bg-pink-50 transition-all group"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                      <span className="text-green-600 text-sm font-bold">A</span>
+                    </div>
+                    <div className="flex-1">
+                      <span>Pants</span>
+                      <p className="text-xs text-gray-500 mt-1">Hair accessories & more</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-pink-600" />
+                  </Link>
+
+                  <Link 
+                    href="/products?category=girls&subcategory=accessories" 
+                    className="flex items-center space-x-3 text-gray-700 hover:text-pink-600 font-medium py-4 px-4 rounded-lg hover:bg-pink-50 transition-all group"
+                    onClick={handleMobileLinkClick}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                      <span className="text-green-600 text-sm font-bold">A</span>
+                    </div>
+                    <div className="flex-1">
+                      <span>Leggings</span>
+                      <p className="text-xs text-gray-500 mt-1">Hair accessories & more</p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-pink-600" />
+                  </Link>
+
+                  {/* View All Girls */}
+                  <div className="mt-6 pt-4 border-t">
+                    <Link 
+                      href="/products?category=girls"
+                      className="block text-center bg-pink-600 text-white py-3 px-4 rounded-lg hover:bg-pink-700 transition-colors font-medium"
+                      onClick={handleMobileLinkClick}
+                    >
+                      View All Girls Collection
+                    </Link>
+                  </div>
+                </nav>
+              </div>
+            )}
           </div>
         </>
       )}

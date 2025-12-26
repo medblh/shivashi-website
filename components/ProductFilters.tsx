@@ -18,8 +18,8 @@ interface FilterProps {
     maxPrice: string;
     collection: string;
   }) => void;
-  hideCollectionFilter?: boolean; // NOUVELLE PROP (au lieu de hideCategoryFilter)
-  hideCategoryFilter?: boolean; // NOUVELLE PROP
+  hideCollectionFilter?: boolean;
+  hideCategoryFilter?: boolean; 
 }
 
 const sizes = [2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -30,7 +30,7 @@ export default function ProductFilters({
   collections, 
   onFilterChange,
   hideCategoryFilter = false,
-  hideCollectionFilter = false // CHANGÉ ICI
+  hideCollectionFilter = false
 }: FilterProps) {
   const [filters, setFilters] = useState({
     category: '',
@@ -155,7 +155,7 @@ function FilterContent({
         <h3 className="text-lg font-semibold">Filters</h3>
         <button 
           onClick={clearFilters}
-          className="text-sm text-amber-600 hover:text-amber-700 flex items-center"
+          className="text-sm rgb(52_58_64_/_95%) hover:text-amber-700 flex items-center"
         >
           <X className="h-3 w-3 mr-1" />
           Clear all

@@ -184,7 +184,7 @@ export default function ProductsPage() {
     return (
       <div className="container mx-auto px-4 py-12">
         <div className="flex justify-center items-center h-64">
-          <Loader className="h-8 w-8 animate-spin text-amber-600" />
+          <Loader className="h-8 w-8 animate-spin text-[rgb(52_58_64)]" />
           <span className="ml-2">Loading products and colours...</span>
         </div>
       </div>
@@ -216,7 +216,7 @@ export default function ProductsPage() {
 
             {getActiveFiltersCount() > 0 && (
               <>
-                <div className="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm">
+                <div className="bg-[rgb(52_58_64_/_10%)] text-[rgb(52_58_64)] px-3 py-1 rounded-full text-sm">
                   {getActiveFiltersCount()} active filter(s)
                 </div>
                 <Button 
@@ -270,7 +270,7 @@ export default function ProductsPage() {
                   <CardContent className="p-0">
                     {/* Image du produit */}
                     <Link href={`/products/${product.id}`}>
-                      <div className="relative h-95 w-full overflow-hidden bg-gradient-to-br from-amber-50 to-amber-100">
+                      <div className="relative h-95 w-full overflow-hidden bg-gradient-to-br from-[rgb(52_58_64_/_5%)] to-[rgb(52_58_64_/_10%)]">
                         {product.image ? (
                           <div className="relative w-full h-full">
                             <Image
@@ -286,16 +286,16 @@ export default function ProductsPage() {
                           </div>
                         ) : (
                           <div className="flex flex-col items-center justify-center h-full">
-                            <ImageIcon className="h-12 w-12 text-amber-300 mb-3" />
-                            <p className="text-amber-800 font-medium">No image available</p>
-                            <p className="text-sm text-amber-600 mt-1">{product.name}</p>
+                            <ImageIcon className="h-12 w-12 text-[rgb(52_58_64_/_40%)] mb-3" />
+                            <p className="text-[rgb(52_58_64)] font-medium">No image available</p>
+                            <p className="text-sm text-[rgb(52_58_64_/_70%)] mt-1">{product.name}</p>
                           </div>
                         )}
                         
                         {/* Badge de collection */}
                         {product.collection_name && product.collection_name !== 'default' && (
                           <div className="absolute top-3 left-3">
-                            <span className="bg-white/90 backdrop-blur-sm text-amber-700 text-xs px-2 py-1 rounded-full font-medium">
+                            <span className="bg-white/90 backdrop-blur-sm text-[rgb(52_58_64)] text-xs px-2 py-1 rounded-full font-medium">
                               {product.collection_name}
                             </span>
                           </div>
@@ -304,7 +304,7 @@ export default function ProductsPage() {
                         {/* Badge featured */}
                         {product.featured && (
                           <div className="absolute top-3 right-3">
-                            <span className="bg-amber-500 text-white text-xs px-2 py-1 rounded-full font-medium">
+                            <span className="bg-[rgb(52_58_64)] text-white text-xs px-2 py-1 rounded-full font-medium">
                               Featured
                             </span>
                           </div>
@@ -314,7 +314,7 @@ export default function ProductsPage() {
                     
                     {/* Détails du produit */}
                     <div className="p-6">
-                      <h3 className="font-semibold text-lg mb-2 text-gray-900 group-hover:text-amber-600 transition-colors">
+                      <h3 className="font-semibold text-lg mb-2 text-gray-900 group-hover:text-[rgb(52_58_64)] transition-colors">
                         <Link href={`/products/${product.id}`}>
                           {product.name}
                         </Link>
@@ -352,10 +352,6 @@ export default function ProductsPage() {
                         </div>
                       </div>
                       
-                      {/*<p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                        {product.description}
-                      </p>*/}
-                      
                       <div className="flex justify-between items-center">
                         <div>
                           <span className="text-2xl font-bold text-gray-900">AED{product.price.toFixed(2)}</span>
@@ -375,23 +371,6 @@ export default function ProductsPage() {
                           </Link>
                         </Button>
                       </div>
-                      
-                      {/* Tailles disponibles 
-                      {product.available_sizes && (
-                        <div className="mt-3 pt-3 border-t border-gray-100">
-                          <p className="text-xs text-gray-500">Available sizes:</p>
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {product.available_sizes.split(',').map((size, index) => (
-                              <span 
-                                key={index}
-                                className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
-                              >
-                                {size.trim()}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}*/}
                     </div>
                   </CardContent>
                 </Card>

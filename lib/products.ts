@@ -23,6 +23,7 @@ export interface ProductColor {
   color_name: string;
   color_hex: string;
   created_at: string;
+  gallery?: string[];
 }
 
 export interface ProductVariant {
@@ -215,10 +216,58 @@ export const mockProducts: Product[] = [
     category: "TOP",
     collection_name: "Everyday Set",
     colors: [
-      { id: 1, product_id: 1, color_name: "ivory", color_hex: "#FFFFF0", created_at: new Date().toISOString() },
-      { id: 2, product_id: 1, color_name: "soft pink", color_hex: "#FDB0C0", created_at: new Date().toISOString() },
-      { id: 3, product_id: 1, color_name: "camel beige", color_hex: "#C7AA82", created_at: new Date().toISOString() },
-      { id: 4, product_id: 1, color_name: "chocolate brown", color_hex: "#7B3F00", created_at: new Date().toISOString() }
+      { 
+        id: 1, 
+        product_id: 25, 
+        color_name: "ivory", 
+        color_hex: "#FFFFF0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/every3.jpg",
+          "/images/every4.jpg",
+          "/images/every2.jpg",
+          "/images/every1.jpg"
+        ]
+      },
+      { 
+        id: 2, 
+        product_id: 25, 
+        color_name: "soft pink", 
+        color_hex: "#FDB0C0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/every1.jpg",
+          "/images/every2.jpg",
+          "/images/every1.jpg",
+          "/images/every2.jpg"
+        ]
+      },
+      { 
+        id: 3, 
+        product_id: 25, 
+        color_name: "camel beige", 
+        color_hex: "#C7AA82", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/everyday-hoodie-beige-1.jpg",
+          "/images/everyday-hoodie-beige-2.jpg",
+          "/images/everyday-hoodie-beige-3.jpg",
+          "/images/everyday-hoodie-beige-4.jpg"
+        ]
+      },
+      { 
+        id: 4, 
+        product_id: 25, 
+        color_name: "chocolate brown", 
+        color_hex: "#7B3F00", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/everyday-hoodie-brown-1.jpg",
+          "/images/everyday-hoodie-brown-2.jpg",
+          "/images/everyday-hoodie-brown-3.jpg",
+          "/images/everyday-hoodie-brown-4.jpg"
+        ]
+      }
     ],
     gender: "boy",
     stock: 10,
@@ -227,15 +276,15 @@ export const mockProducts: Product[] = [
     total_stock: 10,
     available_sizes: "2,3,4,5,6,7,8,9,10",
     variants: [
-      { id: 1, product_id: 1, size: 2, quantity: 1, created_at: new Date().toISOString() },
-      { id: 2, product_id: 1, size: 3, quantity: 2, created_at: new Date().toISOString() },
-      { id: 3, product_id: 1, size: 4, quantity: 3, created_at: new Date().toISOString() },
-      { id: 4, product_id: 1, size: 5, quantity: 2, created_at: new Date().toISOString() },
-      { id: 5, product_id: 1, size: 6, quantity: 1, created_at: new Date().toISOString() },
-      { id: 6, product_id: 1, size: 7, quantity: 1, created_at: new Date().toISOString() },
-      { id: 7, product_id: 1, size: 8, quantity: 0, created_at: new Date().toISOString() },
-      { id: 8, product_id: 1, size: 9, quantity: 0, created_at: new Date().toISOString() },
-      { id: 9, product_id: 1, size: 10, quantity: 0, created_at: new Date().toISOString() }
+      { id: 1, product_id: 25, size: 2, quantity: 1, created_at: new Date().toISOString() },
+      { id: 2, product_id: 25, size: 3, quantity: 2, created_at: new Date().toISOString() },
+      { id: 3, product_id: 25, size: 4, quantity: 3, created_at: new Date().toISOString() },
+      { id: 4, product_id: 25, size: 5, quantity: 2, created_at: new Date().toISOString() },
+      { id: 5, product_id: 25, size: 6, quantity: 1, created_at: new Date().toISOString() },
+      { id: 6, product_id: 25, size: 7, quantity: 1, created_at: new Date().toISOString() },
+      { id: 7, product_id: 25, size: 8, quantity: 0, created_at: new Date().toISOString() },
+      { id: 8, product_id: 25, size: 9, quantity: 0, created_at: new Date().toISOString() },
+      { id: 9, product_id: 25, size: 10, quantity: 0, created_at: new Date().toISOString() }
     ]
   },
   {
@@ -253,10 +302,58 @@ export const mockProducts: Product[] = [
     category: "Short",
     collection_name: "Everyday Set",
     colors: [
-      { id: 5, product_id: 2, color_name: "ivory", color_hex: "#FFFFF0", created_at: new Date().toISOString() },
-      { id: 6, product_id: 2, color_name: "soft pink", color_hex: "#FDB0C0", created_at: new Date().toISOString() },
-      { id: 7, product_id: 2, color_name: "camel beige", color_hex: "#C7AA82", created_at: new Date().toISOString() },
-      { id: 8, product_id: 2, color_name: "chocolate brown", color_hex: "#7B3F00", created_at: new Date().toISOString() }
+      { 
+        id: 5, 
+        product_id: 2, 
+        color_name: "ivory", 
+        color_hex: "#FFFFF0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/everyday-short-ivory-1.jpg",
+          "/images/everyday-short-ivory-2.jpg",
+          "/images/everyday-short-ivory-3.jpg",
+          "/images/everyday-short-ivory-4.jpg"
+        ]
+      },
+      { 
+        id: 6, 
+        product_id: 2, 
+        color_name: "soft pink", 
+        color_hex: "#FDB0C0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/everyday-short-pink-1.jpg",
+          "/images/everyday-short-pink-2.jpg",
+          "/images/everyday-short-pink-3.jpg",
+          "/images/everyday-short-pink-4.jpg"
+        ]
+      },
+      { 
+        id: 7, 
+        product_id: 2, 
+        color_name: "camel beige", 
+        color_hex: "#C7AA82", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/everyday-short-beige-1.jpg",
+          "/images/everyday-short-beige-2.jpg",
+          "/images/everyday-short-beige-3.jpg",
+          "/images/everyday-short-beige-4.jpg"
+        ]
+      },
+      { 
+        id: 8, 
+        product_id: 2, 
+        color_name: "chocolate brown", 
+        color_hex: "#7B3F00", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/everyday-short-brown-1.jpg",
+          "/images/everyday-short-brown-2.jpg",
+          "/images/everyday-short-brown-3.jpg",
+          "/images/everyday-short-brown-4.jpg"
+        ]
+      }
     ],
     gender: "boy",
     stock: 5,
@@ -287,10 +384,58 @@ export const mockProducts: Product[] = [
     category: "T-shirt", 
     collection_name: "Everyday Set",
     colors: [
-      { id: 9, product_id: 3, color_name: "ivory", color_hex: "#FFFFF0", created_at: new Date().toISOString() },
-      { id: 10, product_id: 3, color_name: "soft pink", color_hex: "#FDB0C0", created_at: new Date().toISOString() },
-      { id: 11, product_id: 3, color_name: "camel beige", color_hex: "#C7AA82", created_at: new Date().toISOString() },
-      { id: 12, product_id: 3, color_name: "chocolate brown", color_hex: "#7B3F00", created_at: new Date().toISOString() }
+      { 
+        id: 9, 
+        product_id: 3, 
+        color_name: "ivory", 
+        color_hex: "#FFFFF0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/relaxed-tee-ivory-1.jpg",
+          "/images/relaxed-tee-ivory-2.jpg",
+          "/images/relaxed-tee-ivory-3.jpg",
+          "/images/relaxed-tee-ivory-4.jpg"
+        ]
+      },
+      { 
+        id: 10, 
+        product_id: 3, 
+        color_name: "soft pink", 
+        color_hex: "#FDB0C0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/relaxed-tee-pink-1.jpg",
+          "/images/relaxed-tee-pink-2.jpg",
+          "/images/relaxed-tee-pink-3.jpg",
+          "/images/relaxed-tee-pink-4.jpg"
+        ]
+      },
+      { 
+        id: 11, 
+        product_id: 3, 
+        color_name: "camel beige", 
+        color_hex: "#C7AA82", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/relaxed-tee-beige-1.jpg",
+          "/images/relaxed-tee-beige-2.jpg",
+          "/images/relaxed-tee-beige-3.jpg",
+          "/images/relaxed-tee-beige-4.jpg"
+        ]
+      },
+      { 
+        id: 12, 
+        product_id: 3, 
+        color_name: "chocolate brown", 
+        color_hex: "#7B3F00", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/relaxed-tee-brown-1.jpg",
+          "/images/relaxed-tee-brown-2.jpg",
+          "/images/relaxed-tee-brown-3.jpg",
+          "/images/relaxed-tee-brown-4.jpg"
+        ]
+      }
     ],
     gender: "girl",
     stock: 15,
@@ -325,8 +470,45 @@ export const mockProducts: Product[] = [
     category: "limited",
     collection_name: "Cozy Set",
     colors: [
-      { id: 35, product_id: 10, color_name: "or", color_hex: "#FFD700", created_at: new Date().toISOString() },
-      { id: 36, product_id: 10, color_name: "argent", color_hex: "#C0C0C0", created_at: new Date().toISOString() }
+      { 
+        id: 115, 
+        product_id: 10, 
+        color_name: "ivory", 
+        color_hex: "#FFFFF0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/cozy-sweat-ivory-1.jpg",
+          "/images/cozy-sweat-ivory-2.jpg",
+          "/images/cozy-sweat-ivory-3.jpg",
+          "/images/cozy-sweat-ivory-4.jpg"
+        ]
+      },
+      { 
+        id: 116, 
+        product_id: 10, 
+        color_name: "soft pink", 
+        color_hex: "#FDB0C0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/cozy-sweat-pink-1.jpg",
+          "/images/cozy-sweat-pink-2.jpg",
+          "/images/cozy-sweat-pink-3.jpg",
+          "/images/cozy-sweat-pink-4.jpg"
+        ]
+      },
+      { 
+        id: 117, 
+        product_id: 10, 
+        color_name: "camel beige", 
+        color_hex: "#C7AA82", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/cozy-sweat-beige-1.jpg",
+          "/images/cozy-sweat-beige-2.jpg",
+          "/images/cozy-sweat-beige-3.jpg",
+          "/images/cozy-sweat-beige-4.jpg"
+        ]
+      }
     ],
     gender: "unisex",
     stock: 2,
@@ -346,7 +528,7 @@ export const mockProducts: Product[] = [
     price: 199.99,
     description: "Designed for movement and comfort, the Track Pants bring effortless style to everyday play. Crafted from soft cotton with a relaxed, straight-leg fit, they feature an elastic waistband and drawstring for the perfect fit. The minimal design makes them easy to pair with any top — especially our matching Cozy Sweat.",
     image: "/images/cozypant.jpg",
-    gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
+    gallery: [
       "/images/DSC09334.jpg",
       "/images/DSC09335.jpg",
       "/images/DSC09336.jpg",
@@ -355,8 +537,45 @@ export const mockProducts: Product[] = [
     category: "T-shirt", 
     collection_name: "Cozy Set",
     colors: [
-      { id: 13, product_id: 4, color_name: "or", color_hex: "#FFD700", created_at: new Date().toISOString() },
-      { id: 14, product_id: 4, color_name: "argent", color_hex: "#C0C0C0", created_at: new Date().toISOString() }
+      { 
+        id: 112, 
+        product_id: 4, 
+        color_name: "ivory", 
+        color_hex: "#FFFFF0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/cozy-pant-ivory-1.jpg",
+          "/images/cozy-pant-ivory-2.jpg",
+          "/images/cozy-pant-ivory-3.jpg",
+          "/images/cozy-pant-ivory-4.jpg"
+        ]
+      },
+      { 
+        id: 113, 
+        product_id: 4, 
+        color_name: "soft pink", 
+        color_hex: "#FDB0C0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/cozy-pant-pink-1.jpg",
+          "/images/cozy-pant-pink-2.jpg",
+          "/images/cozy-pant-pink-3.jpg",
+          "/images/cozy-pant-pink-4.jpg"
+        ]
+      },
+      { 
+        id: 114, 
+        product_id: 4, 
+        color_name: "camel beige", 
+        color_hex: "#C7AA82", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/cozy-pant-beige-1.jpg",
+          "/images/cozy-pant-beige-2.jpg",
+          "/images/cozy-pant-beige-3.jpg",
+          "/images/cozy-pant-beige-4.jpg"
+        ]
+      }
     ],
     gender: "boy",
     stock: 15,
@@ -391,10 +610,45 @@ export const mockProducts: Product[] = [
     category: "T-shirt", 
     collection_name: "Active Logo Set",
     colors: [
-      { id: 15, product_id: 5, color_name: "ivory", color_hex: "#FFFFF0", created_at: new Date().toISOString() },
-      { id: 16, product_id: 5, color_name: "soft pink", color_hex: "#FDB0C0", created_at: new Date().toISOString() },
-      { id: 17, product_id: 5, color_name: "camel beige", color_hex: "#C7AA82", created_at: new Date().toISOString() },
-      { id: 18, product_id: 5, color_name: "chocolate brown", color_hex: "#7B3F00", created_at: new Date().toISOString() }
+      { 
+        id: 157, 
+        product_id: 5, 
+        color_name: "ivory", 
+        color_hex: "#FFFFF0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/logo-tee-ivory-1.jpg",
+          "/images/logo-tee-ivory-2.jpg",
+          "/images/logo-tee-ivory-3.jpg",
+          "/images/logo-tee-ivory-4.jpg"
+        ]
+      },
+      { 
+        id: 167, 
+        product_id: 5, 
+        color_name: "soft pink", 
+        color_hex: "#FDB0C0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/logo-tee-pink-1.jpg",
+          "/images/logo-tee-pink-2.jpg",
+          "/images/logo-tee-pink-3.jpg",
+          "/images/logo-tee-pink-4.jpg"
+        ]
+      },
+      { 
+        id: 177, 
+        product_id: 5, 
+        color_name: "black", 
+        color_hex: "#000000", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/logo-tee-black-1.jpg",
+          "/images/logo-tee-black-2.jpg",
+          "/images/logo-tee-black-3.jpg",
+          "/images/logo-tee-black-4.jpg"
+        ]
+      }
     ],
     gender: "girl",
     stock: 15,
@@ -420,7 +674,7 @@ export const mockProducts: Product[] = [
     price: 199.99,
     description: "Play, stretch, and move with ease. The Logo Bike Shorts feature a flattering high-rise logo waistband and a soft stretch cotton finish for total comfort. Designed for active days and endless play.",
     image: "/images/logoshort.jpg",
-    gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
+    gallery: [
       "/images/DSC09334.jpg",
       "/images/DSC09335.jpg",
       "/images/DSC09336.jpg",
@@ -429,10 +683,45 @@ export const mockProducts: Product[] = [
     category: "T-shirt", 
     collection_name: "Active Logo Set",
     colors: [
-      { id: 19, product_id: 6, color_name: "ivory", color_hex: "#FFFFF0", created_at: new Date().toISOString() },
-      { id: 20, product_id: 6, color_name: "soft pink", color_hex: "#FDB0C0", created_at: new Date().toISOString() },
-      { id: 21, product_id: 6, color_name: "camel beige", color_hex: "#C7AA82", created_at: new Date().toISOString() },
-      { id: 22, product_id: 6, color_name: "chocolate brown", color_hex: "#7B3F00", created_at: new Date().toISOString() }
+      { 
+        id: 123, 
+        product_id: 6, 
+        color_name: "ivory", 
+        color_hex: "#FFFFF0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/logo-short-ivory-1.jpg",
+          "/images/logo-short-ivory-2.jpg",
+          "/images/logo-short-ivory-3.jpg",
+          "/images/logo-short-ivory-4.jpg"
+        ]
+      },
+      { 
+        id: 162, 
+        product_id: 6, 
+        color_name: "soft pink", 
+        color_hex: "#FDB0C0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/logo-short-pink-1.jpg",
+          "/images/logo-short-pink-2.jpg",
+          "/images/logo-short-pink-3.jpg",
+          "/images/logo-short-pink-4.jpg"
+        ]
+      },
+      { 
+        id: 179, 
+        product_id: 6, 
+        color_name: "black", 
+        color_hex: "#000000", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/logo-short-black-1.jpg",
+          "/images/logo-short-black-2.jpg",
+          "/images/logo-short-black-3.jpg",
+          "/images/logo-short-black-4.jpg"
+        ]
+      }
     ],
     gender: "girl",
     stock: 15,
@@ -458,7 +747,7 @@ export const mockProducts: Product[] = [
     price: 199.99,
     description: "Play, stretch, and move with ease. The Logo Bike Shorts feature a flattering high-rise logo waistband and a soft stretch cotton finish for total comfort. Designed for active days and endless play.",
     image: "/images/logopant.jpg",
-    gallery: [ // ← AJOUTER LA GALERIE D'IMAGES
+    gallery: [
       "/images/DSC09334.jpg",
       "/images/DSC09335.jpg",
       "/images/DSC09336.jpg",
@@ -467,10 +756,45 @@ export const mockProducts: Product[] = [
     category: "T-shirt", 
     collection_name: "Active Logo Set",
     colors: [
-      { id: 23, product_id: 7, color_name: "ivory", color_hex: "#FFFFF0", created_at: new Date().toISOString() },
-      { id: 24, product_id: 7, color_name: "soft pink", color_hex: "#FDB0C0", created_at: new Date().toISOString() },
-      { id: 25, product_id: 7, color_name: "camel beige", color_hex: "#C7AA82", created_at: new Date().toISOString() },
-      { id: 26, product_id: 7, color_name: "chocolate brown", color_hex: "#7B3F00", created_at: new Date().toISOString() }
+      { 
+        id: 129, 
+        product_id: 7, 
+        color_name: "ivory", 
+        color_hex: "#FFFFF0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/logo-legging-ivory-1.jpg",
+          "/images/logo-legging-ivory-2.jpg",
+          "/images/logo-legging-ivory-3.jpg",
+          "/images/logo-legging-ivory-4.jpg"
+        ]
+      },
+      { 
+        id: 132, 
+        product_id: 7, 
+        color_name: "soft pink", 
+        color_hex: "#FDB0C0", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/logo-legging-pink-1.jpg",
+          "/images/logo-legging-pink-2.jpg",
+          "/images/logo-legging-pink-3.jpg",
+          "/images/logo-legging-pink-4.jpg"
+        ]
+      },
+      { 
+        id: 139, 
+        product_id: 7, 
+        color_name: "black", 
+        color_hex: "#000000", 
+        created_at: new Date().toISOString(),
+        gallery: [
+          "/images/logo-legging-black-1.jpg",
+          "/images/logo-legging-black-2.jpg",
+          "/images/logo-legging-black-3.jpg",
+          "/images/logo-legging-black-4.jpg"
+        ]
+      }
     ],
     gender: "girl",
     stock: 15,
@@ -490,8 +814,6 @@ export const mockProducts: Product[] = [
       { id: 59, product_id: 7, size: 10, quantity: 0, created_at: new Date().toISOString() }
     ]
   }
-
-  
 ];
 
 
