@@ -223,10 +223,10 @@ export const mockProducts: Product[] = [
         color_hex: "#FFFFF0", 
         created_at: new Date().toISOString(),
         gallery: [
-          "/images/every3.jpg",
-          "/images/every4.jpg",
-          "/images/every2.jpg",
-          "/images/every1.jpg"
+          "/images/everyivory.png",
+          "/images/everyivoryf.png",
+          "/images/everyivory2.png",
+          "/images/everyivory2f.png"
         ]
       },
       { 
@@ -236,10 +236,10 @@ export const mockProducts: Product[] = [
         color_hex: "#FDB0C0", 
         created_at: new Date().toISOString(),
         gallery: [
-          "/images/every1.jpg",
-          "/images/every2.jpg",
-          "/images/every1.jpg",
-          "/images/every2.jpg"
+          "/images/everypink.png",
+          "/images/everypinkf.png",
+          "/images/everypink2.png",
+          "/images/everypink2f.png"
         ]
       },
       { 
@@ -249,10 +249,10 @@ export const mockProducts: Product[] = [
         color_hex: "#C7AA82", 
         created_at: new Date().toISOString(),
         gallery: [
-          "/images/everyday-hoodie-beige-1.jpg",
-          "/images/everyday-hoodie-beige-2.jpg",
-          "/images/everyday-hoodie-beige-3.jpg",
-          "/images/everyday-hoodie-beige-4.jpg"
+          "/images/everybeige.png",
+          "/images/everybeigef.png",
+          "/images/everybeige2.png",
+          "/images/everybeige2f.png"
         ]
       },
       { 
@@ -262,10 +262,10 @@ export const mockProducts: Product[] = [
         color_hex: "#7B3F00", 
         created_at: new Date().toISOString(),
         gallery: [
-          "/images/everyday-hoodie-brown-1.jpg",
-          "/images/everyday-hoodie-brown-2.jpg",
-          "/images/everyday-hoodie-brown-3.jpg",
-          "/images/everyday-hoodie-brown-4.jpg"
+          "/images/everybrown.png",
+          "/images/everybrownf.png",
+          "/images/everybrown2.png",
+          "/images/everybrown2f.png"
         ]
       }
     ],
@@ -309,10 +309,8 @@ export const mockProducts: Product[] = [
         color_hex: "#FFFFF0", 
         created_at: new Date().toISOString(),
         gallery: [
-          "/images/everyday-short-ivory-1.jpg",
-          "/images/everyday-short-ivory-2.jpg",
-          "/images/everyday-short-ivory-3.jpg",
-          "/images/everyday-short-ivory-4.jpg"
+          "/images/shortivory.png",
+          "/images/shortivory2.png"
         ]
       },
       { 
@@ -322,10 +320,8 @@ export const mockProducts: Product[] = [
         color_hex: "#FDB0C0", 
         created_at: new Date().toISOString(),
         gallery: [
-          "/images/everyday-short-pink-1.jpg",
-          "/images/everyday-short-pink-2.jpg",
-          "/images/everyday-short-pink-3.jpg",
-          "/images/everyday-short-pink-4.jpg"
+          "/images/shortpink.png",
+          "/images/shortpink2.png"
         ]
       },
       { 
@@ -335,10 +331,8 @@ export const mockProducts: Product[] = [
         color_hex: "#C7AA82", 
         created_at: new Date().toISOString(),
         gallery: [
-          "/images/everyday-short-beige-1.jpg",
-          "/images/everyday-short-beige-2.jpg",
-          "/images/everyday-short-beige-3.jpg",
-          "/images/everyday-short-beige-4.jpg"
+          "/images/short.jpg",
+          "/images/short2.jpg"
         ]
       },
       { 
@@ -348,10 +342,8 @@ export const mockProducts: Product[] = [
         color_hex: "#7B3F00", 
         created_at: new Date().toISOString(),
         gallery: [
-          "/images/everyday-short-brown-1.jpg",
-          "/images/everyday-short-brown-2.jpg",
-          "/images/everyday-short-brown-3.jpg",
-          "/images/everyday-short-brown-4.jpg"
+          "/images/shortbrown.png",
+          "/images/shortbrown2.png"
         ]
       }
     ],

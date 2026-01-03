@@ -71,11 +71,11 @@ export default function Home() {
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
           </div>
           
-          <div className="relative h-full flex flex-col items-start justify-center text-white p-6 lg:p-16">
-            <h3 className="text-3xl lg:text-5xl font-bold mb-4 lg:mb-6 tracking-wide">BOYS</h3>
+          <div className="relative h-full flex flex-col items-start justify-end text-white p-6 lg:p-16">
+            <h3 className="text-xl lg:text-xl font-bold mb-4 lg:mb-6 tracking-wide">BOYS</h3>
             <Button
               asChild
-              className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-4 py-2 lg:px-8 lg:py-4 text-xs lg:text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
+              className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
             >
               <a href="/products/boys">
                 Discover Now
@@ -93,11 +93,11 @@ export default function Home() {
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
           </div>
           
-          <div className="relative h-full flex flex-col items-end justify-center text-white p-6 lg:p-16">
-            <h3 className="text-3xl lg:text-5xl font-bold mb-4 lg:mb-6 tracking-wide text-right">GIRLS</h3>
+          <div className="relative h-full flex flex-col items-end justify-end text-white p-6 lg:p-16">
+            <h3 className="text-xl lg:text-xl font-bold mb-4 lg:mb-6 tracking-wide text-right">GIRLS</h3>
             <Button
               asChild
-              className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-4 py-2 lg:px-8 lg:py-4 text-xs lg:text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
+              className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
             >
               <a href="/products/girls">
                 Discover Now
@@ -118,11 +118,11 @@ export default function Home() {
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
           </div>
           
-          <div className="relative h-full flex flex-col items-start justify-center text-white p-6 lg:p-16">
-            <h3 className="text-3xl lg:text-5xl font-bold mb-4 lg:mb-6 tracking-wide">ACTIVEWEAR</h3>
+          <div className="relative h-full flex flex-col items-start justify-end text-white p-6 lg:p-16">
+            <h3 className="text-xl lg:text-xl font-bold mb-4 lg:mb-6 tracking-wide">ACTIVEWEAR</h3>
             <Button
               asChild
-              className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-4 py-2 lg:px-8 lg:py-4 text-xs lg:text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
+              className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
             >
               <a href="/products/activewear">
                 Discover Now
@@ -140,11 +140,11 @@ export default function Home() {
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-all duration-300"></div>
           </div>
           
-          <div className="relative h-full flex flex-col items-end justify-center text-white p-6 lg:p-16">
-            <h3 className="text-3xl lg:text-5xl font-bold mb-4 lg:mb-6 tracking-wide text-right">LOUNGEWEAR</h3>
+          <div className="relative h-full flex flex-col items-end justify-end text-white p-6 lg:p-16">
+            <h3 className="text-xl lg:text-xl font-bold mb-4 lg:mb-6 tracking-wide text-right">LOUNGEWEAR</h3>
             <Button
               asChild
-              className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-4 py-2 lg:px-8 lg:py-4 text-xs lg:text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
+              className="bg-transparent text-white hover:bg-white hover:text-black border-2 border-white px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm font-bold tracking-widest rounded-none transition-all duration-300 uppercase"
             >
               <a href="/products/loungewear">
                 Discover Now
@@ -154,7 +154,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Three Column Section */}
+      {/* Three Column Section - LAISSÉ COMME AVANT */}
       <div className="flex flex-col lg:flex-row">
         {/* Best Sellers */}
         <div className="relative w-full lg:w-1/3 h-[40vh] lg:h-screen group overflow-hidden">

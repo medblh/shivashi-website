@@ -610,15 +610,11 @@ export default function Header() {
           />
           
           {/* Conteneur principal pour les menus */}
-          <div className="fixed top-0 left-0 h-full flex z-50">
-            {/* Menu Principal - toujours visible quand mobileMenuOpen est true */}
-            {mobileMenuOpen && (
+          <div className="fixed top-0 left-0 h-full w-full flex z-50">
+            {/* Menu Principal - visible seulement quand mobileMenuOpen est true et aucun sous-menu n'est actif */}
+            {mobileMenuOpen && !activeSubMenu && (
               <div 
-                className={`
-                  h-full bg-white shadow-2xl overflow-y-auto
-                  transform transition-all duration-300 ease-in-out
-                  ${activeSubMenu ? 'translate-x-0 w-64' : 'translate-x-0 w-80'}
-                `}
+                className="h-full bg-white shadow-2xl overflow-y-auto w-full max-w-sm animate-in slide-in-from-left duration-300"
               >
                 {/* En-tête du menu */}
                 <div className="flex justify-between items-center p-4 border-b">
@@ -691,9 +687,7 @@ export default function Header() {
                   {/* Bouton Boys */}
                   <button 
                     onClick={() => openSubMenu('boys')}
-                    className={`flex items-center justify-between text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100 w-full text-left group ${
-                      activeSubMenu === 'boys' ? 'bg-blue-50 text-blue-600' : ''
-                    }`}
+                    className={`flex items-center justify-between text-gray-700 hover:text-blue-600 font-medium py-4 px-4 rounded-lg hover:bg-blue-50 transition-all border-b border-gray-100 w-full text-left group`}
                   >
                     <div className="flex items-center space-x-3">
                       <Gem className="h-5 w-5" />
@@ -705,9 +699,7 @@ export default function Header() {
                   {/* Bouton Girls */}
                   <button 
                     onClick={() => openSubMenu('girls')}
-                    className={`flex items-center justify-between text-gray-700 hover:text-green-600 font-medium py-4 px-4 rounded-lg hover:bg-green-50 transition-all border-b border-gray-100 w-full text-left group ${
-                      activeSubMenu === 'girls' ? 'bg-pink-50 text-pink-600' : ''
-                    }`}
+                    className={`flex items-center justify-between text-gray-700 hover:text-pink-600 font-medium py-4 px-4 rounded-lg hover:bg-pink-50 transition-all border-b border-gray-100 w-full text-left group`}
                   >
                     <div className="flex items-center space-x-3">
                       <Gem className="h-5 w-5" />
@@ -770,16 +762,10 @@ export default function Header() {
               </div>
             )}
 
-            {/* Sidebar Boys */}
+            {/* Sidebar Boys - visible seulement quand activeSubMenu est 'boys' */}
             {activeSubMenu === 'boys' && (
               <div 
-                className={`
-                  h-full bg-white shadow-2xl overflow-y-auto
-                  transform transition-all duration-300 ease-in-out
-                  translate-x-0
-                  w-80
-                  border-l
-                `}
+                className="h-full bg-white shadow-2xl overflow-y-auto w-full max-w-sm animate-in slide-in-from-right duration-300"
               >
                 {/* En-tête du menu Boys */}
                 <div className="flex items-center p-4 border-b bg-gradient-to-r from-blue-50 to-white">
@@ -895,16 +881,10 @@ export default function Header() {
               </div>
             )}
 
-            {/* Sidebar Girls */}
+            {/* Sidebar Girls - visible seulement quand activeSubMenu est 'girls' */}
             {activeSubMenu === 'girls' && (
               <div 
-                className={`
-                  h-full bg-white shadow-2xl overflow-y-auto
-                  transform transition-all duration-300 ease-in-out
-                  translate-x-0
-                  w-80
-                  border-l
-                `}
+                className="h-full bg-white shadow-2xl overflow-y-auto w-full max-w-sm animate-in slide-in-from-right duration-300"
               >
                 {/* En-tête du menu Girls */}
                 <div className="flex items-center p-4 border-b bg-gradient-to-r from-pink-50 to-white">
@@ -1032,7 +1012,7 @@ export default function Header() {
                     </Link>
                   </div>
                 </nav>
-              </div>
+              </div>  
             )}
           </div>
         </>
